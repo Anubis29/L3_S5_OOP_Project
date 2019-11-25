@@ -5,7 +5,7 @@ import src.game.core.Game;
 public class GameException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 	
-	private Game mGame;
+	private final Game GAME;
 	
 	GameException(Game game){
 		this(game, null);
@@ -13,10 +13,10 @@ public class GameException extends RuntimeException {
 	
 	public GameException(Game game, String msg) {
 		super(msg);
-		mGame = game;
+		this.GAME = game;
 	}
 	
 	public Game getGame() {
-		return mGame;
+		return this.GAME;
 	}
 }

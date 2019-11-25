@@ -10,30 +10,30 @@ import src.game.exception.InvalidCommandException;
 
 public class Game_UI_Console extends Game_UI {
 
-	private Scanner mScanner;
+	private Scanner scanner;
 	
 	public Game_UI_Console(Game game) {
 		super(game);
-		mScanner = new Scanner(System.in);
+		this.scanner = new Scanner(System.in);
 	}
 	
 	@Override
 	public void readUserAction() {
 		
-		boolean validInput = false;
 		
-		while(validInput == false) {
+		while(true) {
+			
 			System.out.print("PLAYER ACTION : ");
 			Command cmd;
 			String cmdStr = null;
 			
 			try {
-				String inputStrArray[] = mScanner.nextLine().toUpperCase().split(" ");
+				String inputStrArray[] = this.scanner.nextLine().toUpperCase().split(" ");
 				cmdStr = inputStrArray[0];
 				
 				cmd = getCommandFromString(cmdStr);
 				
-				if(!cmd.canProcess(inputStrArray.length-1)) {
+				if(!cmd.checkArgCount(inputStrArray.length-1)) {
 					throw new InvalidArgumentException(getGame(), cmd, "Bad argument count!");
 				}
 				
@@ -47,25 +47,34 @@ public class Game_UI_Console extends Game_UI {
 					displayHelp(arg0);
 					break;
 				case TAKE :
+					getGame().take("");
 					break;
 				case LOOK :
 					break;
 				case QUIT :
 					getGame().quit();
-					System.out.println("You exited the game!");
-				//	mLog.warning("QUI");
 					break;
 				case USE :
 					break;
-				}		
+				}
+				
+				break;
+				
 			}catch(GameException e) {
 				System.out.println(e.getMessage());
-			}		
+			}	
 		}
 		
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	@Override
+	public void displayMessage(String msg) {
+		System.out.println(msg);
+	}
+
 	
 	public void displayHelp(String arg0) throws InvalidArgumentException {
 		if(arg0 != null) {

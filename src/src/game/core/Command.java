@@ -70,21 +70,21 @@ public enum Command {
 				+ "[<ITEM_N>]...");
 	
 	
-	private final int mMIN_NB_ARGS;
-	private final int mMAX_NB_ARGS;
-	private final String mHELP_MSG;
+	private final int MIN_NB_ARGS;
+	private final int MAX_NB_ARGS;
+	private final String HELP_MSG;
 
 	private Command(int minArg, int maxArg, String help){
-		mMIN_NB_ARGS = minArg;
-		mMAX_NB_ARGS = maxArg;
-		mHELP_MSG = help;
+		this.MIN_NB_ARGS = minArg;
+		this.MAX_NB_ARGS = maxArg;
+		this.HELP_MSG = help;
 	}
 	
 	public String help() { 
-		return mHELP_MSG;
+		return this.HELP_MSG;
 	}
 	
-	public boolean canProcess(int argCount) {
-		return mMIN_NB_ARGS <= argCount && argCount <= mMAX_NB_ARGS;
+	public boolean checkArgCount(int argCount) {
+		return this.MIN_NB_ARGS <= argCount && argCount <= this.MAX_NB_ARGS;
 	}
 }

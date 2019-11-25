@@ -10,24 +10,24 @@ package src.game.ui;
  */
 
 abstract public class UI_Mode_Selector {
-	public static final UI_Mode sDEFAULT_IO_MODE = UI_Mode.CONSOLE;
+	public static final UI_Mode DEFAULT_IO_MODE = UI_Mode.CONSOLE;
 
-	private static UI_Mode sIO_Mode = sDEFAULT_IO_MODE;
-	private static boolean sIO_ModeCanChange = true;
+	private static UI_Mode IO_Mode = UI_Mode_Selector.DEFAULT_IO_MODE;
+	private static boolean IO_ModeCanChange = true;
 	
 	UI_Mode_Selector(){
-		sIO_ModeCanChange = false;
+		UI_Mode_Selector.IO_ModeCanChange = false;
 	}
 		
 	public static final void setMode(UI_Mode mode) 
 	{
-		if(sIO_ModeCanChange) {
-			sIO_Mode = mode;
+		if(UI_Mode_Selector.IO_ModeCanChange) {
+			UI_Mode_Selector.IO_Mode = mode;
 		}
 	}
 	
 	public static final UI_Mode getMode() 
 	{ 
-		return sIO_Mode;
+		return UI_Mode_Selector.IO_Mode;
 	} 
 }
