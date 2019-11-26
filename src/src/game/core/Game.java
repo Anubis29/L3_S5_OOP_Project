@@ -2,7 +2,7 @@ package src.game.core;
 
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidUIModeException;
-import src.game.ui.game.Game_UI;
+import src.game.ui.game.GameUI;
 
 /**
  * La classe <b>Game</b> représente une instance d'un jeu.<br>
@@ -17,7 +17,7 @@ import src.game.ui.game.Game_UI;
  */
 public class Game {
 
-	private Game_UI ui;
+	private GameUI ui;
 	//private Exit_UI exitUI;
 	
 	private boolean isRunning;
@@ -136,7 +136,7 @@ public class Game {
 	 * @throws InvalidUIModeException Si la création de l'interface a échoué
 	 */
 	private void setup() throws InvalidUIModeException {
-		this.ui = Game_UI.create(this);
+		this.ui = GameUI.create(this);
 		
 		this.quitRequested = false;
 		this.objectiveReached = false;

@@ -8,11 +8,11 @@ import src.game.exception.GameException;
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidCommandException;
 
-public class Game_UI_Console extends Game_UI {
+public class GameUI_Console extends GameUI {
 
 	private Scanner scanner;
 	
-	public Game_UI_Console(Game game) {
+	public GameUI_Console(Game game) {
 		super(game);
 		this.scanner = new Scanner(System.in);
 	}
