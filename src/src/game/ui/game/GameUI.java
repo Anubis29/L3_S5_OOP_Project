@@ -1,6 +1,6 @@
 package src.game.ui.game;
 
-import src.game.core.Game;
+import src.game.core.*;
 import src.game.exception.InvalidUIModeException;
 import src.game.ui.UI_Mode;
 import src.game.ui.UI_ModeSelector;
@@ -45,7 +45,8 @@ abstract public class GameUI {
 
 	
 	abstract public void readUserAction();
-	abstract public void displayMessage(String msg);
+	abstract public void display(String str);
+	abstract public void display(Lookeable l);
 	//abstract public void displayError();
 	//abstract public static void 
 	//abstract public static void displayGameExit();

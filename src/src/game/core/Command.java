@@ -1,5 +1,7 @@
 package src.game.core;
 
+import src.game.exception.InvalidCommandException;
+
 /**
  * <b>Command</b> is an enumeration listing every action available to the player. 
  * The available commands are : 
@@ -86,5 +88,13 @@ public enum Command {
 	
 	public boolean checkArgCount(int argCount) {
 		return this.MIN_NB_ARGS <= argCount && argCount <= this.MAX_NB_ARGS;
+	}
+	
+	public static Command getFromString(String str) throws InvalidCommandException{
+		try {
+			return Command.valueOf(str);
+		}catch(IllegalArgumentException e) {
+			throw new InvalidCommandException(str);
+		}
 	}
 }

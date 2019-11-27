@@ -5,5 +5,5 @@ public interface ItemContainer {
 	public abstract void removeItem(Item item);
 	public abstract Item getItem(String name);
 	public abstract Item[] getItems();
-	public abstract boolean find(Item item);
+	public abstract boolean findItem(Item item);
 }

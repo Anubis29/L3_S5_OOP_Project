@@ -2,8 +2,8 @@ package src.game.ui.game;
 
 import java.util.Scanner;
 
-import src.game.core.Command;
-import src.game.core.Game;
+import src.game.core.*;
+
 import src.game.exception.GameException;
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidCommandException;
@@ -20,7 +20,6 @@ public class GameUI_Console extends GameUI {
 	@Override
 	public void readUserAction() {
 		
-		
 		while(true) {
 			
 			System.out.print("PLAYER ACTION : ");
@@ -31,10 +30,10 @@ public class GameUI_Console extends GameUI {
 				String inputStrArray[] = this.scanner.nextLine().toUpperCase().split(" ");
 				cmdStr = inputStrArray[0];
 				
-				cmd = getCommandFromString(cmdStr);
+				cmd = Command.getFromString(cmdStr);
 				
 				if(!cmd.checkArgCount(inputStrArray.length-1)) {
-					throw new InvalidArgumentException(getGame(), cmd, "Bad argument count!");
+					throw new InvalidArgumentException(cmd, "Bad argument count!");
 				}
 				
 				String arg0 = inputStrArray.length >= 2 ? inputStrArray[1] : null;
@@ -42,14 +41,16 @@ public class GameUI_Console extends GameUI {
 				switch(cmd) 
 				{
 				case GO :
+					getGame().go(arg0);
 					break;
 				case HELP :
 					displayHelp(arg0);
 					break;
 				case TAKE :
-					getGame().take("");
+					getGame().take(arg0);
 					break;
 				case LOOK :
+					getGame().look(arg0);
 					break;
 				case QUIT :
 					getGame().quit();
@@ -68,12 +69,6 @@ public class GameUI_Console extends GameUI {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
-	@Override
-	public void displayMessage(String msg) {
-		System.out.println(msg);
-	}
 
 	
 	public void displayHelp(String arg0) throws InvalidArgumentException {
@@ -82,9 +77,9 @@ public class GameUI_Console extends GameUI {
 			Command cmdHelp;
 			
 			try {
-				cmdHelp = getCommandFromString(arg0);
+				cmdHelp = Command.getFromString(arg0);
 			}catch(InvalidCommandException e) {
-				throw new InvalidArgumentException(getGame(), Command.HELP, arg0 + " is not a valid command name.");
+				throw new InvalidArgumentException(Command.HELP, arg0 + " is not a valid command name.");
 			}
 			
 			System.out.println(cmdHelp.help());
@@ -98,13 +93,17 @@ public class GameUI_Console extends GameUI {
 		System.out.println();
 		
 	}
-	
-	public Command getCommandFromString(String str) throws InvalidCommandException{
-		try {
-			return Command.valueOf(str);
-		}catch(IllegalArgumentException e) {
-			throw new InvalidCommandException(getGame(), str);
-		}
+
+	@Override
+	public void display(String msg) {
+		System.out.println(msg);
 	}
+	
+	@Override
+	public void display(Lookeable l) {
+		this.display(l.getDescription());
+	}
+	
+	
 
 }

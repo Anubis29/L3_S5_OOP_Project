@@ -18,13 +18,13 @@ import src.game.ui.game.GameUI;
 public class Game {
 
 	private GameUI ui;
-	//private Exit_UI exitUI;
 	
 	private boolean isRunning;
 	private boolean quitRequested;
 	private boolean objectiveReached;
 	
-	//private Character 
+	private Personnage player; 
+	
 	
 	public Game()
 	{
@@ -62,7 +62,10 @@ public class Game {
 	 * @throws InvalidArgumentException si place est null ou n'est pas un nom de lieu valide.
 	 */
 	public void go(String place) throws InvalidArgumentException {
+		Place playerPlace = player.getPlace();
 		
+		
+		//player.move(place);
 	}
 	
 	
@@ -74,10 +77,13 @@ public class Game {
 	 * @param item Nom du lieu ou le joueur doit se déplacer.
 	 * @throws InvalidArgumentException si place n'est pas un nom de lieu valide.
 	 */
-	public void look(String item) {
-		
+	public void look(String itemName) {
+		if(itemName == null) {
+			ui.display(player.getPlace().getItem(itemName));
+		}else {
+			ui.display(player.getPlace());
+		}
 	}
-	
 
 	/**
 	 * Permet de prendre un objet dans le lieu ou se trouve le joueur et de le mettre dans le sac du joueur.
@@ -86,8 +92,8 @@ public class Game {
 	 * @throws Something si il n'y a pas assez de place dans le sac du joueur.
 	 * @throws Something si item n'est pas un nom d'objet valide.
 	 */
-	public void take(String item) {
-		System.out.println("Take !! ");
+	public void take(String itemName) {
+		player.addItem(player.getPlace().getItem(itemName));
 	}
 	
 	
@@ -126,7 +132,7 @@ public class Game {
 		}
 		
 		this.isRunning = false;
-		this.ui.displayMessage("Vous avez quitté le jeu");
+		this.ui.display("Vous avez quitté le jeu");
 	}
 	
 	
