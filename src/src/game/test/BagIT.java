@@ -20,7 +20,7 @@ public class BagIT {
     @Test (expected=BagFullException.class)
     public void capacityTest() {
         Bag bagTest = new Bag(0);
-        Item it1 = new Item("", "", 1, null);
+        Item it1 = new Item("", 1, "");
         
         bagTest.addItem(it1);
     }
@@ -34,7 +34,7 @@ public class BagIT {
     @Test 
     public void addAndRemoveTest() {
         Bag bag1 = new Bag();
-        Item it1 = new Item("Item1", "Item1", 1, null);
+        Item it1 = new Item("Item1", 1, "");
         bag1.addItem(it1);
         
         assertSame(bag1, it1.getContainer());
@@ -53,7 +53,7 @@ public class BagIT {
         Bag bag1 = new Bag();
         Bag bag2 = new Bag();
 
-        Item it1 = new Item("Item1", "Item1", 1, null);
+        Item it1 = new Item("Item1", 1, "");
         
         bag1.addItem(it1);
         bag2.addItem(it1);
@@ -84,7 +84,7 @@ public class BagIT {
         final String ITEM_NAME = "Item";
         
         Bag bag1 = new Bag();
-        Item it1 = new Item("", ITEM_NAME, 0, null);
+        Item it1 = new Item(ITEM_NAME, 0, "");
         
         bag1.addItem(it1);
         assertSame(it1, bag1.getItem(ITEM_NAME));

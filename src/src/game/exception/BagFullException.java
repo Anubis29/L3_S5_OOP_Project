@@ -1,6 +1,6 @@
 package src.game.exception;
 
-public class BagFullException extends GameException{
+public class BagFullException extends ItemContainerException{
     private static final long serialVersionUID = 1L;
 
     public BagFullException(String msg) {

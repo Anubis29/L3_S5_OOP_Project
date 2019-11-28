@@ -51,14 +51,18 @@ public class Bag implements ItemContainer {
             throw new GameException("null");
         }
         
-        if(itemToAdd.getContainer() == this) {
+        // Condition de fin de récursion
+        if(this.findItem(itemToAdd) == true) {
             return;
         }
             
         if (this.isAddable(itemToAdd)){
-            itemToAdd.setContainer(this);
-            this.volume+=itemToAdd.getVolume();
+            // La ligne suivante casse la récursion
+            // lancée par itemToAdd.setContainer(this);
             this.itemInBag.add(itemToAdd);
+            this.volume+=itemToAdd.getVolume();
+            // Lance la récursion
+            itemToAdd.setContainer(this);
         }else {
             throw new BagFullException("Failed to add to bag");
         }
