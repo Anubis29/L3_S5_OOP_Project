@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import src.game.core.Bag;
 import src.game.core.Item;
-import src.game.core.Container;
+import src.game.core.container.ItemContainer;
 import src.game.exception.ItemContainerException;
 
 public class ItemIT {
@@ -40,26 +40,26 @@ public class ItemIT {
 
         testItem.setContainer(null);
         assertSame(testItem.getContainer(), null);
-        assertFalse(testContainer2.find(testItem));
+        assertFalse(testContainer2.findItem(testItem));
 
         changeContainer(testItem, testContainer2, testContainer3);
 
     }
     
-    public void changeContainer(Item it, Container c1, Container c2){
+    public void changeContainer(Item it, ItemContainer c1, ItemContainer c2){
         try {
             it.setContainer(c1);
         }catch(ItemContainerException e) {
             fail();
         }
         assertSame(it.getContainer(), c1);
-        assertTrue(c1.find(it));
+        assertTrue(c1.findItem(it));
         
         try{
             it.setContainer(c2);
         }catch(ItemContainerException e) {
-            assertTrue(c1.find(it));
-            assertFalse(c2.find(it));
+            assertTrue(c1.findItem(it));
+            assertFalse(c2.findItem(it));
             assertSame(it.getContainer(), c1);
         }
     }

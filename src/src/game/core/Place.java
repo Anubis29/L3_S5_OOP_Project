@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import src.game.core.container.ItemContainer;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 
-public class Place implements Container<Item>, Lookeable {
+public class Place implements ItemContainer, Lookeable {
 	
 	private final String NAME;
 	private final String DESCRIPTION;
@@ -38,7 +39,7 @@ public class Place implements Container<Item>, Lookeable {
 	}
     
     @Override
-    public Item get(String name) {
+    public Item getItem(String name) {
         for(Item item : this.ITEMS) {
             if(item.getName().equals(name)){
                 return item;
@@ -49,7 +50,7 @@ public class Place implements Container<Item>, Lookeable {
     }
     
     @Override
-    public List<Item> getList() {
+    public List<Item> getItems() {
         return new ArrayList<Item>(this.ITEMS);
     }
     
@@ -62,13 +63,13 @@ public class Place implements Container<Item>, Lookeable {
     }
     
 	//
-    public void add(Item item) {
+    public void addItem(Item item) {
         if(item == null) {
             throw new GameException("null");
         }
         
         // Condition de fin de récursion
-        if(this.find(item) == true) {
+        if(this.findItem(item) == true) {
             return;
         }
             
@@ -81,7 +82,7 @@ public class Place implements Container<Item>, Lookeable {
 		
 
 	// 
-    public boolean remove(Item item) {
+    public boolean removeItem(Item item) {
         if(this.ITEMS.contains(item)) {
             item.setContainer(null);
             this.ITEMS.remove(item);
@@ -93,7 +94,7 @@ public class Place implements Container<Item>, Lookeable {
 	}
 
 	@Override
-	public boolean find(Item item) {
+	public boolean findItem(Item item) {
 	    for(Item litem : this.ITEMS) {
             if(litem == item){
                 return true;

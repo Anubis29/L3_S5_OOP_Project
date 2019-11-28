@@ -1,14 +1,15 @@
 package src.game.core;
 
+import src.game.core.container.ItemContainer;
 import src.game.exception.ItemContainerException;
 
 public class Item implements Lookeable{
-    private static final Container DEFAULT_CONTAINER = null;
+    private static final ItemContainer DEFAULT_CONTAINER = null;
     
 	private  final String DESCRIPTION;
 	private final String NAME;
 	private final int VOLUME ;
-	private Container container;
+	private ItemContainer container;
 	
 	//
 	public Item(String name, int volume, String description){
@@ -28,7 +29,7 @@ public class Item implements Lookeable{
 		return this.VOLUME;
 	}
 	
-	public Container getContainer() {
+	public ItemContainer getContainer() {
 		return this.container;
 	}
 	
@@ -38,10 +39,10 @@ public class Item implements Lookeable{
 
 
  //les accesseurs (setter)
-	public void setContainer(Container container) throws ItemContainerException {
+	public void setContainer(ItemContainer container) throws ItemContainerException {
 	    
-	    Container newContainer = container;
-	    Container oldContainer = this.container;
+	    ItemContainer newContainer = container;
+	    ItemContainer oldContainer = this.container;
 	    
 	    if(newContainer == oldContainer) { // Condition d'arrêt de récursion
 	        return;
@@ -49,13 +50,13 @@ public class Item implements Lookeable{
 	    
 	    if(oldContainer != null) {
 	        this.container = null;
-            oldContainer.remove(this);
+            oldContainer.removeItem(this);
         }
             
         this.container = newContainer;
         if(newContainer != null) {
            try {
-               newContainer.add(this);
+               newContainer.addItem(this);
            }catch(ItemContainerException e){
                this.container = null;
                this.setContainer(oldContainer);

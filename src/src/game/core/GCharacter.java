@@ -57,7 +57,7 @@ public class GCharacter implements Lookeable {
     }
     
     public void addItem(Item itemToAdd){
-        this.bagOfPersonnage.add(itemToAdd); 
+        this.bagOfPersonnage.addItem(itemToAdd); 
     }
     
     public String getDescription(){
@@ -65,12 +65,12 @@ public class GCharacter implements Lookeable {
     }
     
     public void removeItem(Item itemToRemove) throws ItemNotFoundException {
-        this.bagOfPersonnage.remove(itemToRemove);
+        this.bagOfPersonnage.removeItem(itemToRemove);
     }
     
     public void dropItem(Item item) throws ItemNotFoundException {
-        this.bagOfPersonnage.remove(item);
-        this.placeOfPersonnage.add(item);
+        this.bagOfPersonnage.removeItem(item);
+        this.placeOfPersonnage.addItem(item);
     }
     
     

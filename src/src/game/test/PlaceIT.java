@@ -27,7 +27,7 @@ public class PlaceIT {
     public void gettersTest(){
         assertEquals(testPlace.getName(), NAME);
         assertEquals(testPlace.getDescription(), DESCRIPTION);
-        assertTrue(testPlace.getList().isEmpty());
+        assertTrue(testPlace.getItems().isEmpty());
         assertTrue(testPlace.getCharacters().isEmpty());
     }
     
@@ -56,25 +56,25 @@ public class PlaceIT {
         final Item ITEM_TEST_2 = new Item(ITEM_NAME_2, ITEM_CAPACITY, ITEM_DESCRIPTION);
 
         // ensure can't find not existing item
-        assertFalse(testPlace.find(ITEM_TEST_1));
+        assertFalse(testPlace.findItem(ITEM_TEST_1));
         
         // adding items
-        testPlace.add(ITEM_TEST_1);
-        testPlace.add(ITEM_TEST_2);
+        testPlace.addItem(ITEM_TEST_1);
+        testPlace.addItem(ITEM_TEST_2);
         
         try {
-            testPlace.add(null);
+            testPlace.addItem(null);
         }catch(GameException e) {
             
         }
 
-        assertEquals(testPlace.getList().size(), 2);
+        assertEquals(testPlace.getItems().size(), 2);
         assertSame(ITEM_TEST_1.getContainer(), testPlace);
         assertSame(ITEM_TEST_2.getContainer(), testPlace);
-        assertTrue(testPlace.find(ITEM_TEST_1));
-        assertTrue(testPlace.find(ITEM_TEST_2));
-        assertSame(testPlace.get(ITEM_TEST_1.getName()), ITEM_TEST_1);
-        assertSame(testPlace.get(ITEM_TEST_2.getName()), ITEM_TEST_2);
+        assertTrue(testPlace.findItem(ITEM_TEST_1));
+        assertTrue(testPlace.findItem(ITEM_TEST_2));
+        assertSame(testPlace.getItem(ITEM_TEST_1.getName()), ITEM_TEST_1);
+        assertSame(testPlace.getItem(ITEM_TEST_2.getName()), ITEM_TEST_2);
 
         // removing item
         /*
@@ -84,16 +84,16 @@ public class PlaceIT {
          *  removing twice the same item should return false
          */
      
-        testPlace.remove(ITEM_TEST_1);
-        testPlace.remove(ITEM_TEST_1);
+        testPlace.removeItem(ITEM_TEST_1);
+        testPlace.removeItem(ITEM_TEST_1);
 
 
-        assertEquals(testPlace.getList().size(), 1);
+        assertEquals(testPlace.getItems().size(), 1);
         assertNull(ITEM_TEST_1.getContainer());
-        assertFalse(testPlace.find(ITEM_TEST_1));
+        assertFalse(testPlace.findItem(ITEM_TEST_1));
         
-        assertSame(testPlace.get(ITEM_TEST_1.getName()), null);
-        assertSame(testPlace.get(ITEM_TEST_2.getName()), ITEM_TEST_2);
+        assertSame(testPlace.getItem(ITEM_TEST_1.getName()), null);
+        assertSame(testPlace.getItem(ITEM_TEST_2.getName()), ITEM_TEST_2);
     }
     
     @Test 

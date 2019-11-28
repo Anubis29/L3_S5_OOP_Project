@@ -8,6 +8,7 @@ package src.game.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.game.core.container.ItemContainer;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 
@@ -16,7 +17,7 @@ import src.game.exception.GameException;
  * @author audrey
  */
 
-public class Bag implements Container<Item> {
+public class Bag implements ItemContainer {
     private final static int DEFAULT_VOLUME_MAX = 100;
     private final static int DEFAULT_GOLD = 0;
 
@@ -46,13 +47,13 @@ public class Bag implements Container<Item> {
       }
     }
 
-    public void add(Item itemToAdd) throws BagFullException{
+    public void addItem(Item itemToAdd) throws BagFullException{
         if(itemToAdd == null) {
             throw new GameException("null");
         }
         
         // Condition de fin de récursion
-        if(this.find(itemToAdd) == true) {
+        if(this.findItem(itemToAdd) == true) {
             return;
         }
             
@@ -69,7 +70,7 @@ public class Bag implements Container<Item> {
     }
   
     
-    public boolean remove(Item itemToRemove) {
+    public boolean removeItem(Item itemToRemove) {
         if(this.itemInBag.contains(itemToRemove)) {
             itemToRemove.setContainer(null);
             this.itemInBag.remove(itemToRemove);
@@ -79,7 +80,7 @@ public class Bag implements Container<Item> {
         return false;
     }
     
-    public boolean find(Item itemToFind){
+    public boolean findItem(Item itemToFind){
         for (Item allItem : this.itemInBag){
             if (allItem==itemToFind){
                 return true;
@@ -104,11 +105,11 @@ public class Bag implements Container<Item> {
         return this.gold;
     }
     
-    public List<Item> getList(){
+    public List<Item> getItems(){
         return new ArrayList<Item>(this.itemInBag);
     } 
     
-    public Item get(String name) {
+    public Item getItem(String name) {
     	for (Item allItem : this.itemInBag){
     		if (allItem.getName()==name){
                 return allItem;

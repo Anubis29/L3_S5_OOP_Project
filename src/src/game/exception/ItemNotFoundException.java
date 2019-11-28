@@ -1,15 +1,15 @@
 package src.game.exception;
 
 import src.game.core.Item;
-import src.game.core.Container;
+import src.game.core.container.ItemContainer;
 
 public class ItemNotFoundException extends GameException {
 	private static final long serialVersionUID = 1L;
 
 	private final Item ITEM;
-	private final Container CONTAINER;
+	private final ItemContainer CONTAINER;
 	
-	public ItemNotFoundException(Item item, Container container, String msg) {
+	public ItemNotFoundException(Item item, ItemContainer container, String msg) {
 		super(msg + " : with Item [\"" + item.getName() + "\"]");
 		this.ITEM = item;
 		this.CONTAINER = container;
@@ -19,7 +19,7 @@ public class ItemNotFoundException extends GameException {
 		return this.ITEM;
 	}
 	
-	public Container getItemContainer() {
+	public ItemContainer getItemContainer() {
 		return this.CONTAINER;
 	}
 	
