@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import src.game.core.container.GCharacterContainer;
 import src.game.core.container.ItemContainer;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 
-public class Place implements ItemContainer, Lookeable {
+public class Place implements ItemContainer, GCharacterContainer, Lookeable {
 	
 	private final String NAME;
 	private final String DESCRIPTION;
@@ -38,6 +39,7 @@ public class Place implements ItemContainer, Lookeable {
 		return this.DESCRIPTION;
 	}
     
+    
     @Override
     public Item getItem(String name) {
         for(Item item : this.ITEMS) {
@@ -54,6 +56,7 @@ public class Place implements ItemContainer, Lookeable {
         return new ArrayList<Item>(this.ITEMS);
     }
     
+    @Override
     public List<GCharacter> getCharacters(){
         return new ArrayList<GCharacter>(this.CHARACTERS);
     }
@@ -104,6 +107,10 @@ public class Place implements ItemContainer, Lookeable {
 	}
 	
 	public void addCharacter(GCharacter c) {
+	    if(c == null) {
+            throw new GameException("null");
+        }
+	    
 	    if(c.getPlace() != this) {
 	        c.setPlace(this);
 	        this.CHARACTERS.add(c);
@@ -114,6 +121,7 @@ public class Place implements ItemContainer, Lookeable {
 	    this.EXITS.put(exit.getPlace().getName(), exit);
 	}
 	
+	@Override
 	public boolean removeCharacter(GCharacter c) {
 	    
 	    if(c.getPlace() == this) {
@@ -126,6 +134,7 @@ public class Place implements ItemContainer, Lookeable {
 	    return false; 
 	}
 	
+	@Override
 	public boolean findCharacter(GCharacter c) {
 	    for(GCharacter lc : this.CHARACTERS) {
 	        if(c == lc) {
@@ -134,6 +143,20 @@ public class Place implements ItemContainer, Lookeable {
 	    }
 	    return false;
 	}
+
+
+    @Override
+    public GCharacter getCharacter(String name) {
+        for(GCharacter lc : this.CHARACTERS) {
+            if(lc.getName().contentEquals(name)) {
+                return lc;
+            }
+        }
+        
+        return null;
+    }
+
+
 }
 
 	

@@ -101,31 +101,31 @@ public class PlaceIT {
         final String NAME_ALICE = "Alice";
         final String NAME_BOB = "Bob";
         
-        final GCharacter Alice = new GCharacter(NAME_ALICE, (Place) null);
-        final GCharacter Bob = new GCharacter(NAME_BOB, (Place) null);
+        final GCharacter ALICE = new GCharacter(NAME_ALICE, (Place) null);
+        final GCharacter BOB = new GCharacter(NAME_BOB, (Place) null);
 
         
         // ensure can't find not existing item
-        /*assertFalse(testPlace.findCharacter(Alice));
+        assertFalse(testPlace.findCharacter(ALICE));
         
         // adding items
-        testPlace.addItem(Alice);
-        testPlace.addItem(ITEM_TEST_2);
+        testPlace.addCharacter(ALICE);
+        testPlace.addCharacter(BOB);
         
         try {
-            testPlace.addItem(null);
+            testPlace.addCharacter(null);
         }catch(GameException e) {
             
         }
 
-        assertEquals(testPlace.getItems().size(), 2);
-        assertSame(ITEM_TEST_1.getContainer(), testPlace);
-        assertSame(ITEM_TEST_2.getContainer(), testPlace);
-        assertTrue(testPlace.findItem(ITEM_TEST_1));
-        assertTrue(testPlace.findItem(ITEM_TEST_2));
-        assertSame(testPlace.getItem(ITEM_TEST_1.getName()), ITEM_TEST_1);
-        assertSame(testPlace.getItem(ITEM_TEST_2.getName()), ITEM_TEST_2);
-*/
+        assertEquals(testPlace.getCharacters().size(), 2);
+        assertSame(ALICE.getPlace(), testPlace);
+        assertSame(BOB.getPlace(), testPlace);
+        assertTrue(testPlace.findCharacter(ALICE));
+        assertTrue(testPlace.findCharacter(BOB));
+        assertSame(testPlace.getCharacter(ALICE.getName()), ALICE);
+        assertSame(testPlace.getCharacter(BOB.getName()), BOB);
+
         // removing item
         /*
          *  Should be one item in the place (item 2),
@@ -133,16 +133,15 @@ public class PlaceIT {
          *  and we should not be able to find the item
          *  removing twice the same item should return false
          */
-     /*
-        testPlace.removeItem(ITEM_TEST_1);
-        testPlace.removeItem(ITEM_TEST_1);*/
+     
+        assertTrue(testPlace.removeCharacter(ALICE));
+        assertFalse(testPlace.removeCharacter(ALICE));
 
-
-      /*  assertEquals(testPlace.getItems().size(), 1);
-        assertNull(ITEM_TEST_1.getContainer());
-        assertFalse(testPlace.findItem(ITEM_TEST_1));
+        assertEquals(testPlace.getCharacters().size(), 1);
+        assertNull(ALICE.getPlace());
+        assertFalse(testPlace.findCharacter(ALICE));
         
-        assertSame(testPlace.getItem(ITEM_TEST_1.getName()), null);
-        assertSame(testPlace.getItem(ITEM_TEST_2.getName()), ITEM_TEST_2);
-    */}
+        assertSame(testPlace.getCharacter(ALICE.getName()), null);
+        assertSame(testPlace.getCharacter(BOB.getName()), BOB);
+    }
 }

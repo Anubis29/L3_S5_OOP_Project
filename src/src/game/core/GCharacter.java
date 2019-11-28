@@ -29,7 +29,9 @@ public class GCharacter implements Lookeable {
         this.bagOfPersonnage=new Bag();
         this.placeOfPersonnage=placeOfStart;
         
-        this.placeOfPersonnage.addCharacter(this);
+        if(this.placeOfPersonnage != null) {
+            this.placeOfPersonnage.addCharacter(this);
+        }
     }
     
     public void addLP(int lpRecover) throws DeadCharacterException{

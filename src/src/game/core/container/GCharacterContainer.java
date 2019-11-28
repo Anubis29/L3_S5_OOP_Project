@@ -6,10 +6,10 @@ import src.game.core.GCharacter;
 
 public interface GCharacterContainer  {
     
-    public abstract GCharacterContainer getCharacter(String name);
-    public abstract List<GCharacterContainer> getCharacters();
+    public abstract GCharacter getCharacter(String name);
+    public abstract List<GCharacter> getCharacters();
 
     public abstract void addCharacter(GCharacter element);
-    public abstract boolean findItem(GCharacter element);
-    public abstract boolean removeItem(GCharacter element);
+    public abstract boolean findCharacter(GCharacter element);
+    public abstract boolean removeCharacter(GCharacter element);
 }
