@@ -7,7 +7,7 @@ import java.util.Map;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 
-public class Place implements ItemContainer, Lookeable {
+public class Place implements Container<Item>, Lookeable {
 	
 	private final String NAME;
 	private final String DESCRIPTION;
@@ -38,7 +38,7 @@ public class Place implements ItemContainer, Lookeable {
 	}
     
     @Override
-    public Item getItem(String name) {
+    public Item get(String name) {
         for(Item item : this.ITEMS) {
             if(item.getName().equals(name)){
                 return item;
@@ -49,7 +49,7 @@ public class Place implements ItemContainer, Lookeable {
     }
     
     @Override
-    public List<Item> getItems() {
+    public List<Item> getList() {
         return new ArrayList<Item>(this.ITEMS);
     }
     
@@ -62,13 +62,13 @@ public class Place implements ItemContainer, Lookeable {
     }
     
 	//
-    public void addItem(Item item) {
+    public void add(Item item) {
         if(item == null) {
             throw new GameException("null");
         }
         
         // Condition de fin de récursion
-        if(this.findItem(item) == true) {
+        if(this.find(item) == true) {
             return;
         }
             
@@ -81,7 +81,7 @@ public class Place implements ItemContainer, Lookeable {
 		
 
 	// 
-    public boolean removeItem(Item item) {
+    public boolean remove(Item item) {
         if(this.ITEMS.contains(item)) {
             item.setContainer(null);
             this.ITEMS.remove(item);
@@ -93,7 +93,7 @@ public class Place implements ItemContainer, Lookeable {
 	}
 
 	@Override
-	public boolean findItem(Item item) {
+	public boolean find(Item item) {
 	    for(Item litem : this.ITEMS) {
             if(litem == item){
                 return true;
@@ -109,6 +109,10 @@ public class Place implements ItemContainer, Lookeable {
 	    }
 	}
 	
+	public void addExit(Exit exit) {
+	    this.EXITS.put(exit.getPlace().getName(), exit);
+	}
+	
 	public boolean removeCharacter(GCharacter c) {
 	    
 	    if(c.getPlace() == this) {
@@ -119,6 +123,15 @@ public class Place implements ItemContainer, Lookeable {
 	    }
 	    
 	    return false; 
+	}
+	
+	public boolean findCharacter(GCharacter c) {
+	    for(GCharacter lc : this.CHARACTERS) {
+	        if(c == lc) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 }
 

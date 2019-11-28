@@ -22,7 +22,7 @@ public class GCharacter implements Lookeable {
     private Bag bagOfPersonnage;
     private Place placeOfPersonnage;
     
-    GCharacter(String nameOfPersonnage, Place placeOfStart){
+    public GCharacter(String nameOfPersonnage, Place placeOfStart){
         this.NAME=nameOfPersonnage;
         this.LP_MAX= DEFAULT_MAX_LP;
         this.lp=this.LP_MAX;
@@ -57,7 +57,7 @@ public class GCharacter implements Lookeable {
     }
     
     public void addItem(Item itemToAdd){
-        this.bagOfPersonnage.addItem(itemToAdd); 
+        this.bagOfPersonnage.add(itemToAdd); 
     }
     
     public String getDescription(){
@@ -65,12 +65,12 @@ public class GCharacter implements Lookeable {
     }
     
     public void removeItem(Item itemToRemove) throws ItemNotFoundException {
-        this.bagOfPersonnage.removeItem(itemToRemove);
+        this.bagOfPersonnage.remove(itemToRemove);
     }
     
     public void dropItem(Item item) throws ItemNotFoundException {
-        this.bagOfPersonnage.removeItem(item);
-        this.placeOfPersonnage.addItem(item);
+        this.bagOfPersonnage.remove(item);
+        this.placeOfPersonnage.add(item);
     }
     
     

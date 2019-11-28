@@ -13,7 +13,7 @@ public class BagIT {
     public void createTest() {
         Bag bagTest = new Bag();
         
-        assertTrue(bagTest.getItems().isEmpty());
+        assertTrue(bagTest.getList().isEmpty());
         assertEquals(bagTest.getGold(), 0);
     }
     
@@ -22,28 +22,28 @@ public class BagIT {
         Bag bagTest = new Bag(0);
         Item it1 = new Item("", 1, "");
         
-        bagTest.addItem(it1);
+        bagTest.add(it1);
     }
     
     @Test (expected=RuntimeException.class)
     public void addNullTest() {
         Bag bagTest = new Bag(1);
-        bagTest.addItem(null);
+        bagTest.add(null);
     }
     
     @Test 
     public void addAndRemoveTest() {
         Bag bag1 = new Bag();
         Item it1 = new Item("Item1", 1, "");
-        bag1.addItem(it1);
+        bag1.add(it1);
         
         assertSame(bag1, it1.getContainer());
-        assertSame(bag1.getItem("Item1"), it1);
+        assertSame(bag1.get("Item1"), it1);
         
-        assertTrue(bag1.removeItem(it1));
-        assertFalse(bag1.removeItem(null));
+        assertTrue(bag1.remove(it1));
+        assertFalse(bag1.remove(null));
 
-        assertEquals(bag1.getItems().size(), 0);
+        assertEquals(bag1.getList().size(), 0);
         assertSame(it1.getContainer(), null);
         
     }
@@ -55,12 +55,12 @@ public class BagIT {
 
         Item it1 = new Item("Item1", 1, "");
         
-        bag1.addItem(it1);
-        bag2.addItem(it1);
+        bag1.add(it1);
+        bag2.add(it1);
 
         assertSame(bag2, it1.getContainer());
-        assertEquals(bag1.getItems().size(), 0);
-        assertSame(bag2.getItem("Item1"), it1);
+        assertEquals(bag1.getList().size(), 0);
+        assertSame(bag2.get("Item1"), it1);
     }
     
     @Test
@@ -86,13 +86,13 @@ public class BagIT {
         Bag bag1 = new Bag();
         Item it1 = new Item(ITEM_NAME, 0, "");
         
-        bag1.addItem(it1);
-        assertSame(it1, bag1.getItem(ITEM_NAME));
-        assertTrue(bag1.findItem(it1));
+        bag1.add(it1);
+        assertSame(it1, bag1.get(ITEM_NAME));
+        assertTrue(bag1.find(it1));
         
-        bag1.removeItem(it1);
-        assertSame(null, bag1.getItem(ITEM_NAME));
-        assertFalse(bag1.findItem(it1));
+        bag1.remove(it1);
+        assertSame(null, bag1.get(ITEM_NAME));
+        assertFalse(bag1.find(it1));
 
     }
     

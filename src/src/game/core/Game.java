@@ -86,7 +86,7 @@ public class Game {
 	 */
 	public void look(String itemName) {
 		if(itemName == null) {
-			ui.display(player.getPlace().getItem(itemName));
+			ui.display(player.getPlace().get(itemName));
 		}else {
 			ui.display(player.getPlace());
 		}
@@ -100,7 +100,7 @@ public class Game {
 	 * @throws Something si item n'est pas un nom d'objet valide.
 	 */
 	public void take(String itemName) {
-		player.addItem(player.getPlace().getItem(itemName));
+		player.addItem(player.getPlace().get(itemName));
 	}
 	
 	

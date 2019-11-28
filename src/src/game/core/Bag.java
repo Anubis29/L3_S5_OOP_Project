@@ -16,7 +16,7 @@ import src.game.exception.GameException;
  * @author audrey
  */
 
-public class Bag implements ItemContainer {
+public class Bag implements Container<Item> {
     private final static int DEFAULT_VOLUME_MAX = 100;
     private final static int DEFAULT_GOLD = 0;
 
@@ -46,13 +46,13 @@ public class Bag implements ItemContainer {
       }
     }
 
-    public void addItem(Item itemToAdd) throws BagFullException{
+    public void add(Item itemToAdd) throws BagFullException{
         if(itemToAdd == null) {
             throw new GameException("null");
         }
         
         // Condition de fin de récursion
-        if(this.findItem(itemToAdd) == true) {
+        if(this.find(itemToAdd) == true) {
             return;
         }
             
@@ -69,7 +69,7 @@ public class Bag implements ItemContainer {
     }
   
     
-    public boolean removeItem(Item itemToRemove) {
+    public boolean remove(Item itemToRemove) {
         if(this.itemInBag.contains(itemToRemove)) {
             itemToRemove.setContainer(null);
             this.itemInBag.remove(itemToRemove);
@@ -79,7 +79,7 @@ public class Bag implements ItemContainer {
         return false;
     }
     
-    public boolean findItem(Item itemToFind){
+    public boolean find(Item itemToFind){
         for (Item allItem : this.itemInBag){
             if (allItem==itemToFind){
                 return true;
@@ -104,11 +104,11 @@ public class Bag implements ItemContainer {
         return this.gold;
     }
     
-    public List<Item> getItems(){
+    public List<Item> getList(){
         return new ArrayList<Item>(this.itemInBag);
     } 
     
-    public Item getItem(String name) {
+    public Item get(String name) {
     	for (Item allItem : this.itemInBag){
     		if (allItem.getName()==name){
                 return allItem;
