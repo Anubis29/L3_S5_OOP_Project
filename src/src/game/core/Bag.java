@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.game.exception.BagFullException;
-import src.game.exception.ItemNotFoundException;
+import src.game.exception.GameException;
 
 /**
  *
@@ -47,22 +47,32 @@ public class Bag implements ItemContainer {
     }
 
     public void addItem(Item itemToAdd) throws BagFullException{
+        if(itemToAdd == null) {
+            throw new GameException("null");
+        }
+        
+        if(itemToAdd.getContainer() == this) {
+            return;
+        }
+            
         if (this.isAddable(itemToAdd)){
+            itemToAdd.setContainer(this);
             this.volume+=itemToAdd.getVolume();
             this.itemInBag.add(itemToAdd);
         }else {
             throw new BagFullException("Failed to add to bag");
         }
     }
+  
     
-    public void removeItem(Item itemToRemove) throws ItemNotFoundException {
-        if(this.itemInBag.remove(itemToRemove) == true) {
-            this.volume -= itemToRemove.getVolume();
-            
-            //itemToRemove.setContainer(null);
-        }else { 
-            throw new ItemNotFoundException(itemToRemove, this, "Failed to remove the item");
+    public boolean removeItem(Item itemToRemove) {
+        if(this.itemInBag.contains(itemToRemove)) {
+            itemToRemove.setContainer(null);
+            this.itemInBag.remove(itemToRemove);
+            return true;
         }
+        
+        return false;
     }
     
     public boolean findItem(Item itemToFind){
@@ -78,13 +88,12 @@ public class Bag implements ItemContainer {
         this.gold+=moneyToAdd;
     }
     
-    public void removeGold(int moneyToRemove){
-        if (this.gold-moneyToRemove<=0){
-            this.gold=0;
+    public boolean removeGold(int moneyToRemove){
+        if (this.gold - moneyToRemove >= 0){
+            this.gold -= moneyToRemove;
+            return true;
         }
-        else{
-            this.gold-=moneyToRemove;
-        }
+        return false;    
     }
     
     public int getGold(){
@@ -95,14 +104,13 @@ public class Bag implements ItemContainer {
         return new ArrayList<Item>(this.itemInBag);
     } 
     
-    public Item getItem(String name) throws ItemNotFoundException {
+    public Item getItem(String name) {
     	for (Item allItem : this.itemInBag){
     		if (allItem.getName()==name){
                 return allItem;
             }
         }
     	
-    	// throw exception here
     	return null;
     }
 }

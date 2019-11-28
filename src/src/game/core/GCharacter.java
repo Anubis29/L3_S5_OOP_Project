@@ -12,7 +12,7 @@ import src.game.exception.ItemNotFoundException;
  *
  * @author audrey
  */
-public class Personnage implements Lookeable {
+public class GCharacter implements Lookeable {
     private final static int DEFAULT_MAX_LP = 10;
 
     
@@ -22,14 +22,14 @@ public class Personnage implements Lookeable {
     private Bag bagOfPersonnage;
     private Place placeOfPersonnage;
     
-    Personnage(String nameOfPersonnage, Place placeOfStart){
+    GCharacter(String nameOfPersonnage, Place placeOfStart){
         this.NAME=nameOfPersonnage;
         this.LP_MAX= DEFAULT_MAX_LP;
         this.lp=this.LP_MAX;
         this.bagOfPersonnage=new Bag();
         this.placeOfPersonnage=placeOfStart;
         
-        this.placeOfPersonnage.addPersonnage(this);
+        this.placeOfPersonnage.addCharacter(this);
     }
     
     public void addLP(int lpRecover) throws DeadCharacterException{
@@ -93,12 +93,12 @@ public class Personnage implements Lookeable {
           
             if(placeToGo == null) {
                 this.placeOfPersonnage = null;
-                oldPlace.removePersonnage(this);
+                oldPlace.removeCharacter(this);
             }
             
             this.placeOfPersonnage = newPlace;
             if(newPlace != null) {
-                newPlace.addPersonnage(this);
+                newPlace.addCharacter(this);
             }
             
             return true;

@@ -24,7 +24,7 @@ public class Game {
 	private boolean quitRequested;
 	private boolean objectiveReached;
 	
-	private Personnage player; 
+	private GCharacter player; 
 	
 	
 	public Game()
