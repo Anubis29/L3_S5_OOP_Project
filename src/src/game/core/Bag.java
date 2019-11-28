@@ -12,23 +12,26 @@ import java.util.List;
  *
  * @author audrey
  */
+
 public class Bag implements ItemContainer {
-    private final static int VOLUME_MAX_DEFAULT=100;
+    private final static int DEFAULT_VOLUME_MAX = 100;
+    private final static int DEFAULT_GOLD = 0;
+
     private final int VOLUME_MAX;
     private int volume;
-    private final static int MONEY_DEFAULT=0;
-    private int money;
+    private int gold;
     private List<Item> itemInBag;
     
     public Bag(){
-        this.VOLUME_MAX = VOLUME_MAX_DEFAULT;
+        this.VOLUME_MAX = Bag.DEFAULT_VOLUME_MAX;
+        this.gold = Bag.DEFAULT_GOLD;
+
         this.volume=0;
-        this.money = MONEY_DEFAULT;
         this.itemInBag= new ArrayList<>();
     }
     
     public boolean isAddable(Item itemToAdd){
-      if (this.volume+ itemToAdd.getVolume()<=this.VOLUME_MAX){
+      if (this.volume + itemToAdd.getVolume()<=this.VOLUME_MAX){
         return true;
       }  
       else{
@@ -57,21 +60,21 @@ public class Bag implements ItemContainer {
         return false;
     }
     
-    public void addMoney(int moneyToAdd){
-        this.money+=moneyToAdd;
+    public void addGold(int moneyToAdd){
+        this.gold+=moneyToAdd;
     }
     
-    public void removeMoney(int moneyToRemove){
-        if (this.money-moneyToRemove<=0){
-            this.money=0;
+    public void removeGold(int moneyToRemove){
+        if (this.gold-moneyToRemove<=0){
+            this.gold=0;
         }
         else{
-            this.money-=moneyToRemove;
+            this.gold-=moneyToRemove;
         }
     }
     
     public int getMoney(){
-        return this.money;
+        return this.gold;
     }
     
     public Item[] getItems(){
