@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import src.game.exception.BagFullException;
+import src.game.exception.GameException;
+
 public class Place implements ItemContainer, Lookeable {
 	
 	private final String NAME;
@@ -60,15 +63,32 @@ public class Place implements ItemContainer, Lookeable {
     
 	//
     public void addItem(Item item) {
-		this.ITEMS.add(item);
+        if(item == null) {
+            throw new GameException("null");
+        }
+        
+        // Condition de fin de récursion
+        if(this.findItem(item) == true) {
+            return;
+        }
+            
+        // La ligne suivante casse la récursion
+        // lancée par itemToAdd.setContainer(this);
+        this.ITEMS.add(item);
+        // Lance la récursion
+        item.setContainer(this);
 	}
 		
 
 	// 
     public boolean removeItem(Item item) {
-		//ArrayList<Item> contents;
-		//contents.remove(item);
-        return true;
+        if(this.ITEMS.contains(item)) {
+            item.setContainer(null);
+            this.ITEMS.remove(item);
+            return true;
+        }
+        
+        return false;
 		
 	}
 
@@ -83,7 +103,6 @@ public class Place implements ItemContainer, Lookeable {
 	}
 	
 	public void addCharacter(GCharacter c) {
-	    
 	    if(c.getPlace() != this) {
 	        c.setPlace(this);
 	        this.CHARACTERS.add(c);

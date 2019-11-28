@@ -18,15 +18,15 @@ public class Exit {
 		this.PLACE = place;
 	}
 	
-	boolean canCross() {
+	public boolean canCross() {
 		return true;
 	}
 	
-	String getName() {
+	public String getName() {
 		return this.NAME;
 	}
 	
-	Place getPlace() {
+	public Place getPlace() {
 		return this.PLACE;
 	}
 }
