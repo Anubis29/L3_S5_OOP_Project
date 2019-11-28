@@ -8,6 +8,9 @@ package src.game.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import src.game.exception.BagFullException;
+import src.game.exception.ItemNotFoundException;
+
 /**
  *
  * @author audrey
@@ -23,7 +26,11 @@ public class Bag implements ItemContainer {
     private List<Item> itemInBag;
     
     public Bag(){
-        this.VOLUME_MAX = Bag.DEFAULT_VOLUME_MAX;
+    	this(Bag.DEFAULT_VOLUME_MAX);
+    }
+    
+    public Bag(int maxVolume){
+        this.VOLUME_MAX = maxVolume;
         this.gold = Bag.DEFAULT_GOLD;
 
         this.volume=0;
@@ -39,20 +46,27 @@ public class Bag implements ItemContainer {
       }
     }
 
-    public void addItem(Item itemToAdd){
+    public void addItem(Item itemToAdd) throws BagFullException{
         if (this.isAddable(itemToAdd)){
             this.volume+=itemToAdd.getVolume();
             this.itemInBag.add(itemToAdd);
+        }else {
+            throw new BagFullException("Failed to add to bag");
         }
     }
     
-    public void removeItem(Item itemToRemove){
-        this.volume-=itemToRemove.getVolume();
-        this.itemInBag.remove(itemToRemove);
+    public void removeItem(Item itemToRemove) throws ItemNotFoundException {
+        if(this.itemInBag.remove(itemToRemove) == true) {
+            this.volume -= itemToRemove.getVolume();
+            
+            //itemToRemove.setContainer(null);
+        }else { 
+            throw new ItemNotFoundException(itemToRemove, this, "Failed to remove the item");
+        }
     }
     
     public boolean findItem(Item itemToFind){
-        for (Item allItem :this.itemInBag){
+        for (Item allItem : this.itemInBag){
             if (allItem==itemToFind){
                 return true;
             }
@@ -73,15 +87,15 @@ public class Bag implements ItemContainer {
         }
     }
     
-    public int getMoney(){
+    public int getGold(){
         return this.gold;
     }
     
-    public Item[] getItems(){
-        return (Item[]) this.itemInBag.toArray();
+    public List<Item> getItems(){
+        return new ArrayList<Item>(this.itemInBag);
     } 
     
-    public Item getItem(String name){
+    public Item getItem(String name) throws ItemNotFoundException {
     	for (Item allItem : this.itemInBag){
     		if (allItem.getName()==name){
                 return allItem;

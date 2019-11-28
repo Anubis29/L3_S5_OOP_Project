@@ -1,26 +1,51 @@
 package src.game.core;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class Place implements Lookeable, ItemContainer{
+	public  class Place implements ItemContainer {
+	
+	private  final String NAME;
+	private  final String description;
+		
+	private ArrayList<Item> items =new ArrayList<Item>();
+	private ArrayList<Character> content =new ArrayList<Character>();
+		
+    public Map<String,Exit> v = new HashMap<String, Exit>();
+	
 
-	@Override
-	public String getDescription() {
-		return "Place description";
+    public Place(String n) {
+    	this.NAME=n;
+    }
+    
+    public String getDescription() {
+		return "Place description";}
+	//
+    public void addItem(Item item) {
+		this.items.add(item);
 	}
+		
 
-	public Item getItem(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void addItem(Item itemToRemove) {
-		// TODO Auto-generated method stub
+	// 
+    public void removeItem(Item item) {
+		ArrayList<Item> contents;
+		contents.remove(item);
 		
 	}
+// 
+	public String getName() {
+		return NAME;
+	}
+	
+	
 
-	@Override
-	public void removeItem(Item item) {
-		// TODO Auto-generated method stub
+	public Item getItem(String name) throws ItemNotFoundException {
+		for(Item item : this.items) {
+			si item.getName() est égal à name
+			alors return item
+		}
 		
+		ici lancer une exception
 	}
 
 	@Override
@@ -30,14 +55,10 @@ public class Place implements Lookeable, ItemContainer{
 	}
 
 	@Override
-	public boolean findItem(Item item) {
+	public boolean find(Item item) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
 
-	public void removePersonnage(Personnage personnage) {
-		// TODO Auto-generated method stub
-		
-	}
-
-}
+	

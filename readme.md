@@ -1,5 +1,8 @@
 Effectué : 
 
+Classe personnage 
+- Modifié le constructeur pour empécher les conflits avec la classe Place 
+
 Classe Bag :
 - Modifié l'ordre des variables par défaut pour la lisibilité
 - Changé le nom de la variable money -> gold

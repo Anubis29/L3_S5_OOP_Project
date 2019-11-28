@@ -1,5 +1,6 @@
 package src.game.core;
 
+import src.game.exception.GameException;
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidUIModeException;
 import src.game.ui.game.GameUI;
@@ -62,10 +63,16 @@ public class Game {
 	 * @throws InvalidArgumentException si place est null ou n'est pas un nom de lieu valide.
 	 */
 	public void go(String place) throws InvalidArgumentException {
-		Place playerPlace = player.getPlace();
+		Exit exit = player.getPlace().getExit(place);
+		if(exit == null) {
+		    throw new GameException("Failed to get exit");
+		}
 		
-		
-		//player.move(place);
+		if(exit.canCross()) {
+		    player.setPlace(exit.getPlace());
+		}else {
+		    throw new GameException("Failed to cross exit");
+		}
 	}
 	
 	

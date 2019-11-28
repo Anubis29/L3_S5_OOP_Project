@@ -5,13 +5,18 @@
  */
 package src.game.core;
 
+import src.game.exception.DeadCharacterException;
+import src.game.exception.ItemNotFoundException;
+
 /**
  *
  * @author audrey
  */
-public class Personnage {
+public class Personnage implements Lookeable {
+    private final static int DEFAULT_MAX_LP = 10;
+
+    
     private final String NAME;
-    private final static int LP_MAX_DEFAULT=10;
     private final int LP_MAX;
     private int lp;
     private Bag bagOfPersonnage;
@@ -19,24 +24,30 @@ public class Personnage {
     
     Personnage(String nameOfPersonnage, Place placeOfStart){
         this.NAME=nameOfPersonnage;
-        this.LP_MAX=LP_MAX_DEFAULT;
+        this.LP_MAX= DEFAULT_MAX_LP;
         this.lp=this.LP_MAX;
         this.bagOfPersonnage=new Bag();
         this.placeOfPersonnage=placeOfStart;
+        
+        this.placeOfPersonnage.addPersonnage(this);
     }
     
-    public void addLP(int lpRecover){
-        if (this.lp+lpRecover>this.LP_MAX){
-            this.lp=this.LP_MAX;
-        }
-        else if (this.lp==0){
-        }
-        else{
-            this.lp+=lpRecover;
+    public void addLP(int lpRecover) throws DeadCharacterException{
+    	if(this.isDead()) {
+    		throw new DeadCharacterException(this, "Failed to add LP");
+    	}
+    	
+    	this.lp += lpRecover;
+        if (this.lp > this.LP_MAX){
+            this.lp = this.LP_MAX;
         }
     }
     
     public void removeLP (int lpLost){
+    	if(this.isDead()) {
+    		throw new DeadCharacterException(this, "Failed to remove LP");
+    	}
+    	
         if (this.lp-lpLost<0){
             this.lp=0;
         }
@@ -53,14 +64,15 @@ public class Personnage {
         return this.NAME+" a "+this.lp+"/"+this.LP_MAX;
     }
     
-    
-    
-    public void removeItem(Item itemToRemove){
-        if (this.bagOfPersonnage.findItem(itemToRemove)){
-            this.placeOfPersonnage.addItem(itemToRemove);
-            this.bagOfPersonnage.removeItem(itemToRemove);   
-        }
+    public void removeItem(Item itemToRemove) throws ItemNotFoundException {
+        this.bagOfPersonnage.removeItem(itemToRemove);
     }
+    
+    public void dropItem(Item item) throws ItemNotFoundException {
+        this.bagOfPersonnage.removeItem(item);
+        this.placeOfPersonnage.addItem(item);
+    }
+    
     
     public boolean isDead(){
         if (this.lp==0){
@@ -71,14 +83,37 @@ public class Personnage {
         }
     }
     
-    public void setPlace(Place placeToGo){
-        this.placeOfPersonnage.removePersonnage(this);
-        this.placeOfPersonnage = placeToGo;
+    public boolean setPlace(Place placeToGo){
+        
+        Place oldPlace = this.placeOfPersonnage;
+        Place newPlace = placeToGo;
+        
+        // Permet de casser la récursion, voir TP3
+        if(oldPlace != newPlace) {
+          
+            if(placeToGo == null) {
+                this.placeOfPersonnage = null;
+                oldPlace.removePersonnage(this);
+            }
+            
+            this.placeOfPersonnage = newPlace;
+            if(newPlace != null) {
+                newPlace.addPersonnage(this);
+            }
+            
+            return true;
+        }
+        
+        return false;
     }
     
     public Place getPlace(){
         return this.placeOfPersonnage;
     }
+
+	public String getName() {
+		return this.NAME;
+	}
     
     
     
