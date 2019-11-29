@@ -98,12 +98,7 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
 
 	@Override
 	public boolean findItem(Item item) {
-	    for(Item litem : this.ITEMS) {
-            if(litem == item){
-                return true;
-            }
-        }
-	    return false;
+	    return this.ITEMS.contains(item);
 	}
 	
 	public void addCharacter(GCharacter c) {
@@ -111,9 +106,10 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
             throw new GameException("null");
         }
 	    
-	    if(c.getPlace() != this) {
+	    // Condition de fin de récursion
+	    if(this.CHARACTERS.contains(c) == false) {
+	        this.CHARACTERS.add(c); // Validation de la fin de récursion
 	        c.setPlace(this);
-	        this.CHARACTERS.add(c);
 	    }
 	}
 	
@@ -124,7 +120,7 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
 	@Override
 	public boolean removeCharacter(GCharacter c) {
 	    
-	    if(c.getPlace() == this) {
+	    if(this.findCharacter(c)) {
 	        c.setPlace(null);
 	        this.CHARACTERS.remove(c);
 	        
@@ -136,12 +132,7 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
 	
 	@Override
 	public boolean findCharacter(GCharacter c) {
-	    for(GCharacter lc : this.CHARACTERS) {
-	        if(c == lc) {
-	            return true;
-	        }
-	    }
-	    return false;
+	    return this.CHARACTERS.contains(c);
 	}
 
 

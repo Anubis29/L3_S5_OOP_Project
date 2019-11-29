@@ -5,6 +5,7 @@
  */
 package src.game.core;
 
+import src.game.core.container.ItemContainer;
 import src.game.exception.DeadCharacterException;
 import src.game.exception.ItemNotFoundException;
 
@@ -23,14 +24,18 @@ public class GCharacter implements Lookeable {
     private Place placeOfPersonnage;
     
     public GCharacter(String nameOfPersonnage, Place placeOfStart){
+        this(nameOfPersonnage, placeOfStart, GCharacter.DEFAULT_MAX_LP);
+    }
+    
+    public GCharacter(String nameOfPersonnage, Place placeOfStart, int maxLP){
         this.NAME=nameOfPersonnage;
-        this.LP_MAX= DEFAULT_MAX_LP;
+        this.LP_MAX= maxLP;
         this.lp=this.LP_MAX;
         this.bagOfPersonnage=new Bag();
-        this.placeOfPersonnage=placeOfStart;
+        this.placeOfPersonnage=null;
         
-        if(this.placeOfPersonnage != null) {
-            this.placeOfPersonnage.addCharacter(this);
+        if(placeOfStart != null) {
+            this.setPlace(placeOfStart);
         }
     }
     
@@ -58,6 +63,10 @@ public class GCharacter implements Lookeable {
         }
     }
     
+    public int getLP() {
+        return this.lp;
+    }
+    
     public void addItem(Item itemToAdd){
         this.bagOfPersonnage.addItem(itemToAdd); 
     }
@@ -66,7 +75,7 @@ public class GCharacter implements Lookeable {
         return this.NAME+" a "+this.lp+"/"+this.LP_MAX;
     }
     
-    public void removeItem(Item itemToRemove) throws ItemNotFoundException {
+    public void removeItem(Item itemToRemove) {
         this.bagOfPersonnage.removeItem(itemToRemove);
     }
     
@@ -74,7 +83,6 @@ public class GCharacter implements Lookeable {
         this.bagOfPersonnage.removeItem(item);
         this.placeOfPersonnage.addItem(item);
     }
-    
     
     public boolean isDead(){
         if (this.lp==0){
@@ -85,7 +93,7 @@ public class GCharacter implements Lookeable {
         }
     }
     
-    public boolean setPlace(Place placeToGo){
+    public void setPlace(Place placeToGo){
         
         Place oldPlace = this.placeOfPersonnage;
         Place newPlace = placeToGo;
@@ -93,7 +101,7 @@ public class GCharacter implements Lookeable {
         // Permet de casser la récursion, voir TP3
         if(oldPlace != newPlace) {
           
-            if(placeToGo == null) {
+            if(oldPlace != null) {
                 this.placeOfPersonnage = null;
                 oldPlace.removeCharacter(this);
             }
@@ -101,12 +109,8 @@ public class GCharacter implements Lookeable {
             this.placeOfPersonnage = newPlace;
             if(newPlace != null) {
                 newPlace.addCharacter(this);
-            }
-            
-            return true;
-        }
-        
-        return false;
+            }    
+        } 
     }
     
     public Place getPlace(){

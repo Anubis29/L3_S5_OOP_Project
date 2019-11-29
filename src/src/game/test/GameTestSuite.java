@@ -11,7 +11,8 @@ import src.game.core.Place;
     BagIT.class, 
     ExitIT.class,
     ItemIT.class, 
-    PlaceIT.class
+    PlaceIT.class,
+    GCharacterIT.class
 })
 
 public class GameTestSuite {
