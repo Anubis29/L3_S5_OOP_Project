@@ -1,7 +1,7 @@
 package src.game.exception;
 
-import src.game.core.Item;
 import src.game.core.container.ItemContainer;
+import src.game.core.item.Item;
 
 public class ItemNotFoundException extends GameException {
 	private static final long serialVersionUID = 1L;

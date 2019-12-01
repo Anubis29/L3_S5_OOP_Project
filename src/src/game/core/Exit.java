@@ -1,5 +1,7 @@
 package src.game.core;
 
+import src.game.core.place.Place;
+
 /**
  * @author alexandre
  * @version 0.1

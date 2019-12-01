@@ -4,7 +4,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import src.game.core.Bag;
-import src.game.core.Item;
+import src.game.core.item.Item;
+import src.game.core.item.weapon.Sword;
 import src.game.exception.BagFullException;
 
 public class BagIT {
@@ -20,7 +21,7 @@ public class BagIT {
     @Test (expected=BagFullException.class)
     public void capacityTest() {
         Bag bagTest = new Bag(0);
-        Item it1 = new Item("", 1, "");
+        Item it1 = new Sword();
         
         bagTest.addItem(it1);
     }
@@ -34,11 +35,11 @@ public class BagIT {
     @Test 
     public void addAndRemoveTest() {
         Bag bag1 = new Bag();
-        Item it1 = new Item("Item1", 1, "");
+        Item it1 = new Sword();
         bag1.addItem(it1);
         
         assertSame(bag1, it1.getContainer());
-        assertSame(bag1.getItem("Item1"), it1);
+        assertSame(bag1.getItem(it1.getName()), it1);
         
         assertTrue(bag1.removeItem(it1));
         assertFalse(bag1.removeItem(null));
@@ -53,14 +54,14 @@ public class BagIT {
         Bag bag1 = new Bag();
         Bag bag2 = new Bag();
 
-        Item it1 = new Item("Item1", 1, "");
+        Item it1 = new Sword();
         
         bag1.addItem(it1);
         bag2.addItem(it1);
 
         assertSame(bag2, it1.getContainer());
         assertEquals(bag1.getItems().size(), 0);
-        assertSame(bag2.getItem("Item1"), it1);
+        assertSame(bag2.getItem(it1.getName()), it1);
     }
     
     @Test
@@ -81,17 +82,16 @@ public class BagIT {
     
     @Test
     public void getAndFindItemTest() {
-        final String ITEM_NAME = "Item";
         
         Bag bag1 = new Bag();
-        Item it1 = new Item(ITEM_NAME, 0, "");
+        Item it1 = new Sword();
         
         bag1.addItem(it1);
-        assertSame(it1, bag1.getItem(ITEM_NAME));
+        assertSame(it1, bag1.getItem(it1.getName()));
         assertTrue(bag1.findItem(it1));
         
         bag1.removeItem(it1);
-        assertSame(null, bag1.getItem(ITEM_NAME));
+        assertSame(null, bag1.getItem(it1.getName()));
         assertFalse(bag1.findItem(it1));
 
     }

@@ -6,8 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import src.game.core.GCharacter;
-import src.game.core.Item;
-import src.game.core.Place;
+import src.game.core.item.Item;
+import src.game.core.item.weapon.Sword;
+import src.game.core.place.Place;
 import src.game.exception.DeadCharacterException;
 
 public class GCharacterIT {
@@ -87,7 +88,7 @@ public class GCharacterIT {
     
     @Test
     public void itemTest() {
-        Item ti1 = new Item("Test", 1, "Desc");
+        Item ti1 = new Sword();
         
         testC.addItem(ti1);
         testC.dropItem(ti1);

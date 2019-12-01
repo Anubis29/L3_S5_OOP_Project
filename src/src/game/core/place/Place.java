@@ -1,11 +1,15 @@
-package src.game.core;
+package src.game.core.place;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import src.game.core.Exit;
+import src.game.core.GCharacter;
+import src.game.core.Lookeable;
 import src.game.core.container.GCharacterContainer;
 import src.game.core.container.ItemContainer;
+import src.game.core.item.Item;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 

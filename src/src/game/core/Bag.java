@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import src.game.core.container.ItemContainer;
+import src.game.core.item.Item;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 

@@ -5,33 +5,22 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import src.game.core.Bag;
-import src.game.core.Item;
 import src.game.core.container.ItemContainer;
+import src.game.core.item.Item;
+import src.game.core.item.weapon.Sword;
 import src.game.exception.ItemContainerException;
 
 public class ItemIT {
     @Test
-    public void createAndGettersTest() {
-        final String DESCRIPTION = "Desc";
-        final String NAME = "Name";
-        final int VOLUME = 10;
-        
-        Item testItem = new Item(NAME, VOLUME, DESCRIPTION);
-        
-        assertEquals(testItem.getDescription(), DESCRIPTION);
-        assertEquals(testItem.getName(), NAME);
-        assertEquals(testItem.getVolume(), VOLUME);
-        assertEquals(testItem.getContainer(), null);
-        
+    public void createTest() {
+        Item testItem = new Sword();
+        assertEquals(testItem.getContainer(), null); 
     }
     
     @Test
     public void setContainerTest() {
-        final String DESCRIPTION = "Desc";
-        final String NAME = "Name";
-        final int VOLUME = 10;
         
-        Item testItem = new Item(NAME, VOLUME, DESCRIPTION);
+        Item testItem = new Sword();
         Bag testContainer1 = new Bag();
         Bag testContainer2 = new Bag();
         Bag testContainer3 = new Bag(5);

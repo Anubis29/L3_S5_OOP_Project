@@ -6,6 +6,8 @@
 package src.game.core;
 
 import src.game.core.container.ItemContainer;
+import src.game.core.item.Item;
+import src.game.core.place.Place;
 import src.game.exception.DeadCharacterException;
 import src.game.exception.ItemNotFoundException;
 

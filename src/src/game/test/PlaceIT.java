@@ -7,8 +7,10 @@ import org.junit.Test;
 
 import src.game.core.Exit;
 import src.game.core.GCharacter;
-import src.game.core.Item;
-import src.game.core.Place;
+import src.game.core.item.Item;
+import src.game.core.item.potion.SuperHealPotion;
+import src.game.core.item.weapon.Sword;
+import src.game.core.place.Place;
 import src.game.exception.GameException;
 
 public class PlaceIT {
@@ -52,8 +54,8 @@ public class PlaceIT {
         final int ITEM_CAPACITY = 1;
         final String ITEM_DESCRIPTION = null;
         
-        final Item ITEM_TEST_1 = new Item(ITEM_NAME_1, ITEM_CAPACITY, ITEM_DESCRIPTION );
-        final Item ITEM_TEST_2 = new Item(ITEM_NAME_2, ITEM_CAPACITY, ITEM_DESCRIPTION);
+        final Item ITEM_TEST_1 = new Sword();
+        final Item ITEM_TEST_2 = new SuperHealPotion();
 
         // ensure can't find not existing item
         assertFalse(testPlace.findItem(ITEM_TEST_1));

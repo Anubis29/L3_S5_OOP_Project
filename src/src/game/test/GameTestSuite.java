@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import src.game.core.Place;
+import src.game.core.place.Place;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
@@ -12,7 +12,8 @@ import src.game.core.Place;
     ExitIT.class,
     ItemIT.class, 
     PlaceIT.class,
-    GCharacterIT.class
+    GCharacterIT.class,
+    HealPotionIT.class
 })
 
 public class GameTestSuite {

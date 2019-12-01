@@ -1,19 +1,18 @@
-package src.game.core;
+package src.game.core.item;
 
+import src.game.core.Lookeable;
 import src.game.core.container.ItemContainer;
 import src.game.exception.ItemContainerException;
 
-public class Item implements Lookeable{
+public abstract class Item implements Lookeable{
     private static final ItemContainer DEFAULT_CONTAINER = null;
     
-	private  final String DESCRIPTION;
 	private final String NAME;
 	private final int VOLUME ;
 	private ItemContainer container;
 	
 	//
-	public Item(String name, int volume, String description){
-		this.DESCRIPTION= description;
+	public Item(String name, int volume){
 		this.NAME = name;
 		this.VOLUME= volume;
 		this.container = Item.DEFAULT_CONTAINER;
@@ -33,9 +32,7 @@ public class Item implements Lookeable{
 		return this.container;
 	}
 	
-	public String getDescription() {
-		return this.DESCRIPTION;
-	}
+	public abstract String getDescription();
 
 
  //les accesseurs (setter)

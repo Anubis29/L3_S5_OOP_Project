@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import src.game.core.Exit;
-import src.game.core.Place;
+import src.game.core.place.Place;
 
 public class ExitIT {
     @Test
