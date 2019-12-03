@@ -6,10 +6,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import src.game.core.Exit;
-import src.game.core.GCharacter;
+import src.game.core.character.GCharacter;
 import src.game.core.item.Item;
 import src.game.core.item.potion.SuperHealPotion;
 import src.game.core.item.weapon.Sword;
+import src.game.core.place.Cave;
 import src.game.core.place.Place;
 import src.game.exception.GameException;
 
@@ -21,14 +22,12 @@ public class PlaceIT {
             
     @Before
     public void setUp() {
-        testPlace = new Place(NAME, DESCRIPTION);
+        testPlace = new Cave();
     }
     
     
     @Test 
     public void gettersTest(){
-        assertEquals(testPlace.getName(), NAME);
-        assertEquals(testPlace.getDescription(), DESCRIPTION);
         assertTrue(testPlace.getItems().isEmpty());
         assertTrue(testPlace.getCharacters().isEmpty());
     }
@@ -36,13 +35,12 @@ public class PlaceIT {
     @Test
     public void testExit() {
         final String EXIT_NAME = "Exit";
-        final String EXIT_PLACE_NAME = "ExitPlace";
    
-        final Place EXIT_PLACE = new Place(EXIT_PLACE_NAME, null);
+        final Place EXIT_PLACE = new Cave();
         final Exit TEST_EXIT = new Exit(EXIT_NAME, EXIT_PLACE);
         
         testPlace.addExit(TEST_EXIT);
-        assertSame(testPlace.getExit(EXIT_PLACE_NAME), TEST_EXIT);
+        assertSame(testPlace.getExit(EXIT_PLACE.getName()), TEST_EXIT);
         assertNull(testPlace.getExit("Not existing place"));
     }
     

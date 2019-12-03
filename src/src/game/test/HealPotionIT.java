@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import src.game.core.GCharacter;
+import src.game.core.character.GCharacter;
 import src.game.core.item.potion.*;
 
 public class HealPotionIT {

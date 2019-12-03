@@ -3,12 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package src.game.core;
+package src.game.core.character;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import src.game.core.Bag;
+import src.game.core.Lookeable;
 import src.game.core.container.ItemContainer;
 import src.game.core.item.Item;
 import src.game.core.place.Place;
 import src.game.exception.DeadCharacterException;
+import src.game.exception.GameException;
 import src.game.exception.ItemNotFoundException;
 
 /**
@@ -21,8 +27,9 @@ public class GCharacter implements Lookeable {
     
     private final String NAME;
     private final int LP_MAX;
+    private final Bag bagOfPersonnage;
+
     private int lp;
-    private Bag bagOfPersonnage;
     private Place placeOfPersonnage;
     
     public GCharacter(String nameOfPersonnage, Place placeOfStart){
@@ -69,18 +76,10 @@ public class GCharacter implements Lookeable {
         return this.lp;
     }
     
-    public void addItem(Item itemToAdd){
-        this.bagOfPersonnage.addItem(itemToAdd); 
-    }
-    
     public String getDescription(){
         return this.NAME+" a "+this.lp+"/"+this.LP_MAX;
     }
-    
-    public void removeItem(Item itemToRemove) {
-        this.bagOfPersonnage.removeItem(itemToRemove);
-    }
-    
+        
     public void dropItem(Item item) throws ItemNotFoundException {
         this.bagOfPersonnage.removeItem(item);
         this.placeOfPersonnage.addItem(item);
@@ -124,6 +123,33 @@ public class GCharacter implements Lookeable {
 	}
     
     
+    public String getDialogue(){
+        return "Bonjour cher Hero.......";
+    }
+    
+    
+    
+    public boolean addItem(Item itemToAdd) {
+        return this.bagOfPersonnage.addItem(itemToAdd);
+    }
+  
+    
+    public boolean removeItem(Item itemToRemove) {
+        return this.bagOfPersonnage.removeItem(itemToRemove);
+    }
+    
+    public boolean findItem(Item itemToFind){
+        return this.bagOfPersonnage.findItem(itemToFind);
+    }
+    
+    
+    public List<Item> getItems(){
+        return this.bagOfPersonnage.getItems();
+    } 
+    
+    public Item getItem(String name) {
+        return this.bagOfPersonnage.getItem(name);
+    }
     
     
 }

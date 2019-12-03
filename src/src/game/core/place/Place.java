@@ -5,27 +5,25 @@ import java.util.List;
 import java.util.Map;
 
 import src.game.core.Exit;
-import src.game.core.GCharacter;
 import src.game.core.Lookeable;
+import src.game.core.character.GCharacter;
 import src.game.core.container.GCharacterContainer;
 import src.game.core.container.ItemContainer;
 import src.game.core.item.Item;
 import src.game.exception.BagFullException;
 import src.game.exception.GameException;
 
-public class Place implements ItemContainer, GCharacterContainer, Lookeable {
+public abstract class Place extends ItemContainer implements GCharacterContainer, Lookeable {
 	
 	private final String NAME;
-	private final String DESCRIPTION;
-	private final ArrayList<Item> ITEMS;
 	private final ArrayList<GCharacter> CHARACTERS;	
     private final Map<String,Exit> EXITS;
 	
 
-    public Place(String name, String description) {
+    public Place(String name) {
+        super(Integer.MAX_VALUE);
+        
     	this.NAME = name;
-    	this.DESCRIPTION = description;
-    	this.ITEMS = new ArrayList<Item>();
     	this.CHARACTERS = new ArrayList<GCharacter>();
     	this.EXITS = new HashMap<String, Exit>();
     }
@@ -39,27 +37,6 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
         return this.NAME;
     }
     
-    public String getDescription() {
-		return this.DESCRIPTION;
-	}
-    
-    
-    @Override
-    public Item getItem(String name) {
-        for(Item item : this.ITEMS) {
-            if(item.getName().equals(name)){
-                return item;
-            }
-        }
-    
-        return null;
-    }
-    
-    @Override
-    public List<Item> getItems() {
-        return new ArrayList<Item>(this.ITEMS);
-    }
-    
     @Override
     public List<GCharacter> getCharacters(){
         return new ArrayList<GCharacter>(this.CHARACTERS);
@@ -70,7 +47,7 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
     }
     
 	//
-    public void addItem(Item item) {
+   /* public void addItem(Item item) {
         if(item == null) {
             throw new GameException("null");
         }
@@ -85,11 +62,11 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
         this.ITEMS.add(item);
         // Lance la récursion
         item.setContainer(this);
-	}
+	}*/
 		
 
 	// 
-    public boolean removeItem(Item item) {
+    /*public boolean removeItem(Item item) {
         if(this.ITEMS.contains(item)) {
             item.setContainer(null);
             this.ITEMS.remove(item);
@@ -98,12 +75,12 @@ public class Place implements ItemContainer, GCharacterContainer, Lookeable {
         
         return false;
 		
-	}
+	}*/
 
 	@Override
-	public boolean findItem(Item item) {
+	/*public boolean findItem(Item item) {
 	    return this.ITEMS.contains(item);
-	}
+	}*/
 	
 	public void addCharacter(GCharacter c) {
 	    if(c == null) {

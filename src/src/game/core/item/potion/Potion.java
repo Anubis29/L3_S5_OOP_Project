@@ -1,6 +1,6 @@
 package src.game.core.item.potion;
 
-import src.game.core.GCharacter;
+import src.game.core.character.GCharacter;
 import src.game.core.item.Item;
 import src.game.core.item.Useable;
 

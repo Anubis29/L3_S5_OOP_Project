@@ -18,12 +18,12 @@ public class BagIT {
         assertEquals(bagTest.getGold(), 0);
     }
     
-    @Test (expected=BagFullException.class)
+    @Test
     public void capacityTest() {
         Bag bagTest = new Bag(0);
         Item it1 = new Sword();
         
-        bagTest.addItem(it1);
+        assertFalse(bagTest.addItem(it1));
     }
     
     @Test (expected=RuntimeException.class)
@@ -36,7 +36,8 @@ public class BagIT {
     public void addAndRemoveTest() {
         Bag bag1 = new Bag();
         Item it1 = new Sword();
-        bag1.addItem(it1);
+        
+        assertTrue(bag1.addItem(it1));
         
         assertSame(bag1, it1.getContainer());
         assertSame(bag1.getItem(it1.getName()), it1);

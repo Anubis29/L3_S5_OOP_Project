@@ -5,50 +5,39 @@
  */
 package src.game.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import src.game.core.container.ItemContainer;
-import src.game.core.item.Item;
-import src.game.exception.BagFullException;
-import src.game.exception.GameException;
 
 /**
  *
  * @author audrey
  */
 
-public class Bag implements ItemContainer {
+public class Bag extends ItemContainer {
     private final static int DEFAULT_VOLUME_MAX = 100;
     private final static int DEFAULT_GOLD = 0;
 
-    private final int VOLUME_MAX;
-    private int volume;
     private int gold;
-    private List<Item> itemInBag;
     
     public Bag(){
     	this(Bag.DEFAULT_VOLUME_MAX);
     }
     
     public Bag(int maxVolume){
-        this.VOLUME_MAX = maxVolume;
+        super(maxVolume);
+        
         this.gold = Bag.DEFAULT_GOLD;
-
-        this.volume=0;
-        this.itemInBag= new ArrayList<>();
     }
     
-    public boolean isAddable(Item itemToAdd){
+    /*public boolean isAddable(Item itemToAdd){
       if (this.volume + itemToAdd.getVolume()<=this.VOLUME_MAX){
         return true;
       }  
       else{
         return false;
       }
-    }
+    }*/
 
-    public void addItem(Item itemToAdd) throws BagFullException{
+    /*public void addItem(Item itemToAdd) throws BagFullException{
         if(itemToAdd == null) {
             throw new GameException("null");
         }
@@ -68,10 +57,10 @@ public class Bag implements ItemContainer {
         }else {
             throw new BagFullException("Failed to add to bag");
         }
-    }
+    }*/
   
     
-    public boolean removeItem(Item itemToRemove) {
+   /* public boolean removeItem(Item itemToRemove) {
         if(this.itemInBag.contains(itemToRemove)) {
             itemToRemove.setContainer(null);
             this.itemInBag.remove(itemToRemove);
@@ -79,16 +68,16 @@ public class Bag implements ItemContainer {
         }
         
         return false;
-    }
+    }*/
     
-    public boolean findItem(Item itemToFind){
+    /*public boolean findItem(Item itemToFind){
         for (Item allItem : this.itemInBag){
             if (allItem==itemToFind){
                 return true;
             }
         }
         return false;
-    }
+    }*/
     
     public void addGold(int moneyToAdd){
         this.gold+=moneyToAdd;
@@ -106,7 +95,7 @@ public class Bag implements ItemContainer {
         return this.gold;
     }
     
-    public List<Item> getItems(){
+    /*public List<Item> getItems(){
         return new ArrayList<Item>(this.itemInBag);
     } 
     
@@ -118,5 +107,5 @@ public class Bag implements ItemContainer {
         }
     	
     	return null;
-    }
+    }*/
 }

@@ -1,7 +1,6 @@
 package src.game.core.place;
 
-public interface DarkPlace {
-
-    void light();
-
+public interface DarkPlace{
+	void light();
 }
+	 

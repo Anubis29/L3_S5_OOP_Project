@@ -1,5 +1,7 @@
 package src.game.core;
 
+import src.game.core.character.GCharacter;
+import src.game.core.place.*;
 import src.game.exception.GameException;
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidUIModeException;
@@ -168,4 +170,26 @@ public class Game {
 			System.out.println("Error : " + e.getMessage());
 		}
 	}
+	
+	
+	
+	private Place createMap() {
+	    Place castle = new Castle();
+	    Place village = new Village();
+	    Place river = new River();
+	    Place forest = new Forest();
+	    Place cave = new Cave();
+	    Place plain = new Plain();
+	    Place dragonsLair = new DragonsLair();
+	    
+	    castle.addExit(new Exit("Door", village));
+	    
+	    village.addExit(new Exit("Top of the hill", castle));
+	    village.addExit(new Exit("West Border", river));
+	    village.addExit(new Exit("East Border", forest));
+	    
+	    return castle;
+	}
+	
+	
 }

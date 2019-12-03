@@ -2,7 +2,7 @@ package src.game.core.container;
 
 import java.util.List;
 
-import src.game.core.GCharacter;
+import src.game.core.character.GCharacter;
 
 public interface GCharacterContainer  {
     

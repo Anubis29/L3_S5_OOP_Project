@@ -10,7 +10,7 @@ public class Weapon extends Item {
         this.DAMAGES = damages;
     }
     
-    int getDamages() {
+    public int getDamages() {
         return this.DAMAGES;
     }
 

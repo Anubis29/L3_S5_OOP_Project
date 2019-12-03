@@ -5,9 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import src.game.core.GCharacter;
+import src.game.core.character.GCharacter;
 import src.game.core.item.Item;
 import src.game.core.item.weapon.Sword;
+import src.game.core.place.Cave;
 import src.game.core.place.Place;
 import src.game.exception.DeadCharacterException;
 
@@ -21,7 +22,7 @@ public class GCharacterIT {
     
     @Before
     public void setUp() {
-        cPlace = new Place("", "");
+        cPlace = new Cave();
         testC = new GCharacter(C_NAME, cPlace, C_MAX_LP);
         
     }
