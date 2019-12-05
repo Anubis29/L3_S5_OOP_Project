@@ -78,8 +78,12 @@ public enum Command {
 	
 	TALK(1, 1, 
             "Usage : TALK <CHARACTER>\n" +
-            "Talk to the character specified by <CHARACTER>"
-    );
+            "Talk to the character specified by <CHARACTER>\n"
+    ),
+	
+	QUEST(0, 0, 
+			 "Usage : QUEST\n" +
+			 "Display the list of available quests\n");
     
     
 	

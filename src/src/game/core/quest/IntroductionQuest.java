@@ -12,7 +12,6 @@ public class IntroductionQuest extends Quest {
 	private final Item INTRODUCTION_ITEM;
 	
 	private final GCharacter PLAYER;
-	private final GameUI UI;
 	
 	private final String INTRO_TEXT;
 	private final String WAITING_FOR_ITEM_TAKEN_TEXT;
@@ -20,23 +19,23 @@ public class IntroductionQuest extends Quest {
 	private final LockableExit EXIT;
 
 	
-	public IntroductionQuest(GCharacter player, TalkingCharacter king, String mainEnemy, LockableExit exit, Item introductionItem, String targetItem, String kingdom, GameUI ui) {
+	public IntroductionQuest(String name, GCharacter player, TalkingCharacter king, String mainEnemy, LockableExit exit, Item introductionItem, String targetItem, String kingdom, GameUI ui) {
+		super(name, "Take \"" + introductionItem.getName() + "\"" , ui);
 		this.KING = king;
 		this.INTRODUCTION_ITEM = introductionItem;
 		this.PLAYER = player;
-		this.UI = ui;
 		this.EXIT = exit;
 		
-		this.WAITING_FOR_ITEM_TAKEN_TEXT = "Take this " + introductionItem.getName() + ", it will help you during this journey!\n";
+		this.WAITING_FOR_ITEM_TAKEN_TEXT = "Take this " + introductionItem.getName() + ", it will help you during this journey!";
 		
 		this.INTRO_TEXT = 
 				"Dear " + player.getName() + ", the " + kingdom + " is in danger !\n" + 
 				mainEnemy + " want to rule us all. He is searching for the " + targetItem + ". With this powerfull artefact in" + 
 				"his possession, he will destroy everyting we know. Please, find the " + targetItem + " before him!\n" + 
-				"The " + targetItem + " is lost in the kingdom, I hope you will find it on time...\n" + 
+				"The " + targetItem + " is lost in the kingdom, I hope you will find it on time..." + 
 				this.WAITING_FOR_ITEM_TAKEN_TEXT;
 		
-		this.POST_QUEST_TEXT = "You may find some usefull information in the village.\n";
+		this.POST_QUEST_TEXT = "You may find some usefull information in the village.";
 		
 	}
 	
@@ -48,6 +47,8 @@ public class IntroductionQuest extends Quest {
 		
 		this.KING.setSentence(this.WAITING_FOR_ITEM_TAKEN_TEXT);
 		this.EXIT.lock();
+		
+		super.onStart();
 	}
 	
 	@Override
@@ -64,5 +65,7 @@ public class IntroductionQuest extends Quest {
 		this.KING.setSentence(this.POST_QUEST_TEXT);
 		this.EXIT.unlock();
 		this.UI.display("\"" + this.EXIT.getName() + "\" is now unlocked!\n");
+		
+		super.onComplete();
 	}
 }

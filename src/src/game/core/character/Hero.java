@@ -5,8 +5,6 @@
  */
 package src.game.core.character;
 
-import static java.sql.JDBCType.NULL;
-
 import src.game.core.item.Armor;
 import src.game.core.item.weapon.Weapon;
 import src.game.core.place.Place;

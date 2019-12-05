@@ -4,7 +4,7 @@ import src.game.core.Lookeable;
 import src.game.core.container.ItemContainer;
 import src.game.exception.ItemContainerException;
 
-public abstract class Item implements Lookeable{
+public class Item implements Lookeable{
     private static final ItemContainer DEFAULT_CONTAINER = null;
     
 	private final String NAME;

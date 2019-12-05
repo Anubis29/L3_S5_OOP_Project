@@ -11,11 +11,12 @@ import src.game.core.exit.Exit;
 import src.game.core.exit.LockableExit;
 import src.game.core.item.Item;
 import src.game.core.item.Useable;
+import src.game.core.item.potion.SoftHealPotion;
 import src.game.core.item.weapon.DuskBlade;
 import src.game.core.item.weapon.Sword;
 import src.game.core.place.*;
-import src.game.core.quest.IntroductionQuest;
-import src.game.core.quest.Quest;
+import src.game.core.quest.*;
+
 import src.game.exception.GameException;
 import src.game.exception.InvalidArgumentException;
 import src.game.exception.InvalidCommandException;
@@ -39,19 +40,16 @@ public class Game {
 	
 	private boolean isRunning;
 	private boolean quitRequested;
-	private boolean objectiveReached;
 	
 	private Hero player; 
 	private boolean playerTurn;
-	private List<Quest> quests;
-	
+	private List<Quest> quests;	
 	
 	public Game()
 	{
 		this.ui = null;
 		this.isRunning = false;
 		this.quitRequested = false;
-		this.objectiveReached = false;
 	}
 	
 /*------------------------------------------------------------------------*
@@ -68,110 +66,6 @@ public class Game {
 	public boolean isRunning() {
 		return this.isRunning;
 	}
-	
-	
-/*------------------------------------------------------------------------*
- *                      [ACTION UTILISATEUR]                              *
- *------------------------------------------------------------------------*/
-	
-	/**
-	 * Permet de déplacer le personnage dans un nouveau lieu. Ce lieu doit être eccessible depuis
-	 * la position actuelle du joueur.
-	 * 
-	 * @param place Nom du lieu ou le joueur doit se déplacer.
-	 * @return 
-	 * @throws InvalidArgumentException si place est null ou n'est pas un nom de lieu valide.
-	 */
-	public boolean go(String place) throws InvalidArgumentException {
-		Exit exit = player.getPlace().getExit(place);
-		
-		if(exit == null) {
-		    this.ui.display("Failed find the place \"" + place + "\" are you lost?\n");
-		    return false;
-		}
-		
-		if(!exit.canCross()) {
-		    this.ui.display("Failed to walk to \"" + place + "\", the exit \"" + exit.getName() + "\" cannot be crossed!\n");
-	        return false;
-		}
-		
-        player.setPlace(exit.getPlace());
-        this.ui.display("You successfuly walked to \"" + place + "\"!\n");
-		return true;	
-	}
-	
-	
-	/**
-	 * [TODO]
-	 * Permet d'afficher les objets et les sorties présentes dans le lieu actuel du joueur.<br>
-	 * Si item n'est pas null
-	 * 
-	 * @param item Nom du lieu ou le joueur doit se déplacer.
-	 * @throws InvalidArgumentException si place n'est pas un nom de lieu valide.
-	 */
-	public boolean look(String name) {
-	 	Lookeable toLook = null;
-	 	
-		if(name != null) {
-			Object target = null;
-
-	    	target = searchCurrentPlaceObjectByName(name);
-	    	
-	    	if(target == null) {
-	    		this.ui.display("Failed to look \"" + name + "\" : Not found!\n");
-	    		return false;
-	    	}
-	    	
-	    	try{
-		    	toLook = (Lookeable) target;
-	    	}catch(ClassCastException e) {
-	    		this.ui.display("Failed to look \"" + name + "\" : Not lookeable!\n");
-	    		return false;
-	    	}
-	    	
-		    			
-		}else {
-			toLook = this.player.getPlace();
-		}
-		 
-    	this.ui.display(toLook.getDescription());
-    	return true;
-	}
-
-	/**
-	 * Permet de prendre un objet dans le lieu ou se trouve le joueur et de le mettre dans le sac du joueur.
-	 * 
-	 * @param item Le nom de l'objet à ajouter dans le sac.
-	 * @throws Something si il n'y a pas assez de place dans le sac du joueur.
-	 * @throws Something si item n'est pas un nom d'objet valide.
-	 */
-	public boolean take(String itemName) {
-	    Item item = player.getPlace().getItem(itemName);
-	    boolean addSuccess = true;
-	    
-	    if(item == null) {
-	        this.ui.display("Failed to take \"" + itemName + "\" : Item not found!\n");
-	        addSuccess = false;
-	    }else {
-	        if(!player.addItem(item)) {
-	            this.ui.display("Failed to take \"" + itemName + "\" : Bag full!\n");
-	            addSuccess = false;
-	        }else {
-	            this.ui.display("\"" + itemName + "\" : Successfully added to bag!\n");
-	        }
-	    }
-	    
-	    return addSuccess;  
-	}
-	
-	
-	/**
-	 * Quitte le jeu.
-	 */
-	public void quit() {
-		this.quitRequested = true;
-	}
-	
 	
 /*------------------------------------------------------------------------*
  *                          [MODIFIERS]                                   *
@@ -191,7 +85,7 @@ public class Game {
 		this.isRunning = true;
 
 		this.setup();
-		while(!this.quitRequested && !this.objectiveReached && !this.player.isDead()) {	
+		while(!this.quitRequested && !this.quests.isEmpty() && !this.player.isDead()) {	
 			this.loop();
 		}
 		
@@ -208,9 +102,7 @@ public class Game {
 	private void setup() throws InvalidUIModeException {
 		this.ui = GameUI.create(this);
 		
-		this.quitRequested = false;
-		this.objectiveReached = false;
-		
+		this.quitRequested = false;		
 		this.initGame();
 	}
 	
@@ -222,8 +114,11 @@ public class Game {
 	 */
 	private void loop() {
 		this.updateQuests();
+		
+		if(!this.quests.isEmpty()) {
+			this.playerAction();
+		}
 		    // hero may die here
-		this.playerAction();
 
 	}
 	
@@ -233,62 +128,77 @@ public class Game {
 	}
 	
 	private void createAssets() {
-		final String KINGDOM_NAME = "Northumbria";// Duskblade et Ysdra"
+		final String KINGDOM_NAME = "Northumbria";
 		final String ENEMY_NAME = "Ysdra";
 		
 	    final Item OBJECTIVE_ITEM = new DuskBlade();
 	    
-	    this.player = new Hero(null);
 
-		
-	    TalkingCharacter king = new TalkingCharacter("King of " + KINGDOM_NAME, "The King of " + KINGDOM_NAME + ". despite this old age, he is still a respected king.", null, null);
 	    Place throneRoom = new Place("Throne room", "A huge place");
 	    Place village = new Place(KINGDOM_NAME + " village", "The center of " + KINGDOM_NAME + " activities. It is always an active place.");
+	    Place river = new Place(KINGDOM_NAME + " west river", "A magnificent river. The river is to large to be crossed.");
+	    Place forest = new Place(KINGDOM_NAME + " east forest", "This forest seems unsafe.");
+	    Place cave = new Cave("Cave", "Nothing special here.");
+	    Place plain = new Place("Endless plains", "Nothing special here.");
+	    Place mountain = new Place("Montains", "Nothing special here.");
+	    Place dragonsLair = new Place("Dragon's Lair", "Nothing special here.");
+	    
+	    
+	    // Throne room
+	    this.player = new Hero(null);
+	    TalkingCharacter king = new TalkingCharacter("King of " + KINGDOM_NAME, "The King of " + KINGDOM_NAME + ". despite this old age, he is still a respected king.", null, null);
 	    LockableExit throneToVillage = new LockableExit("Main door", village);
 	    
 	    throneRoom.addExit(throneToVillage);
 	    throneRoom.addCharacter(king);
 	    throneRoom.addCharacter(this.player);
+	    throneRoom.addItem(new SoftHealPotion());
 	    
-	    IntroductionQuest intro = new IntroductionQuest(this.player, king, ENEMY_NAME, throneToVillage, new Sword(), OBJECTIVE_ITEM.getName(), KINGDOM_NAME, this.ui);
-	    intro.start();
-	    this.quests.add(intro);
-	    
-	    /*Castle castle = new Castle(king, village);
-	    this.events.add(castle);
-	    castle.addItem(new SuperHealPotion());
-	    Place river = new River();
-	    Place forest = new Forest();
-	    Place cave = new Cave();
-	    Place plain = new Plain();
-	    Place montain = new Montain();
-	    
-	    DuskBlade blade = new DuskBlade();
-	    this.events.add(blade);
-	    Place dragonsLair = new DragonsLair(blade);
-	    	    
-	    village.addExit(new Exit("Top of the hill", castle));
+	    // Village
+	    village.addExit(new Exit("Top of the hill", throneRoom));
 	    village.addExit(new Exit("West Border", river));
 	    village.addExit(new Exit("East Border", forest));
 	    village.addExit(new Exit("South Border", plain));
+	    TalkingCharacter ringMan = new TalkingCharacter("Jean", "He seems sad.", "Hey you! My wife lost her ring in the river. If you find it, can you bring it to me ?\n", null);
+	    village.addCharacter(ringMan);
 	    
+	    // River
 	    river.addExit(new Exit("East", village));
-	    
+	    Item ring = new Item("Gold ring", "A prety nice ring!", 0);
+	    river.addItem(ring);
+
+	    // Forest
 	    forest.addExit(new Exit("West", village));
 	    forest.addExit(new Exit("Cave entrance", cave));
 	    
+	    // Cave
 	    cave.addExit(new Exit("Cave exit", forest));
-	    
+
+	    // Plain
 	    plain.addExit(new Exit("North", village));
-	    plain.addExit(new Exit("Rocky road", montain));
+	    plain.addExit(new Exit("Rocky road", mountain));
 	    
-	    montain.addExit(new Exit("Bottom of the montain", plain));
-	    montain.addExit(new Exit("Entrance of the Dragon's Lair", dragonsLair));
+	    // Mountain
+	    mountain.addExit(new Exit("Bottom of the montain", plain));
+	    mountain.addExit(new Exit("Entrance of the Dragon's Lair", dragonsLair));
 	    
-	    dragonsLair.addExit(new Exit("Magic teleport", castle));
+	    // Dragon's lair
+	    dragonsLair.addExit(new Exit("Magic teleport", throneRoom));
+	    dragonsLair.addItem(OBJECTIVE_ITEM);
 	    
-        this.player = new Hero(castle);*/
+	    // Quests
+	    IntroductionQuest intro = new IntroductionQuest("Introduction", this.player, king, ENEMY_NAME, throneToVillage, new Sword(), OBJECTIVE_ITEM.getName(), KINGDOM_NAME, this.ui);
+	    this.quests.add(intro);
+	    intro.start();
+	    
+	    MainQuest mainQuest = new MainQuest("Save " + KINGDOM_NAME, OBJECTIVE_ITEM, this.ui);
+	    this.quests.add(mainQuest);	  
+	    mainQuest.start();
+	    
+	    RingQuest ringQuest = new RingQuest("A bad day", "Find " + ringMan.getName() + "'s ring in the river", this.player, ringMan, ring, this.ui);
+	    this.quests.add(ringQuest);
 	}
+	
 	
 	private void updateQuests() {
 	    List<Quest> toRemove = new ArrayList<>();
@@ -299,28 +209,17 @@ public class Game {
 				toRemove.add(q);
 		    }
 		}
+		
+		for(Quest q : toRemove) {
+			this.quests.remove(q);
+	    }
 	}
 	
-	/*private void processGameEvents() {
-	    List<GameEvent> toRemove = new ArrayList<>();
-	    
-	    for(GameEvent e : this.events) {
-	        if(e.processEvent(this)) {
-	            toRemove.add(e);
-	            // the event is processed and will never be used, so we remove it
-	        }
-	    }
-	    
-	    for(GameEvent e : toRemove) {
-	        this.events.remove(e);
-        }
-	    
-	}*/
-	
-	public boolean talk(String cName) {
+	public boolean talk(String cName, List<Object> argList) {
 	    for(GCharacter c : this.player.getPlace().getCharacters()) {
 	        if(c.getName().toUpperCase().equals(cName.toUpperCase()) && c instanceof Talkative) {
 	            this.ui.displaySentence((Talkative) c); 
+	            argList.add(c);
 	            return true;
 	        }
 	    }
@@ -376,15 +275,21 @@ public class Game {
 
 	        
 	        // If failed to process the command, it's still the player turn
-	        if(!processCommand(cmd, args)) {
+	        List<Object> argList = new ArrayList<Object>();
+	        if(!processCommand(cmd, args, argList)) {
 	            this.playerTurn = true;
+	        }else {
+	        	// Action success
+	        	for(Quest q : this.quests) {
+	        		q.onUserAction(cmd,argList);
+	        	}
 	        }
 	    }
 	}
 	
 	
 	
-	public boolean processCommand(Command cmd, List<String> args) {
+	public boolean processCommand(Command cmd, List<String> args, List<Object> argList) {
 	    String arg0 = (args.size() >= 1) ? args.get(0) : null;
         String arg1 = (args.size() >= 2) ? args.get(1) : null;
 
@@ -393,45 +298,156 @@ public class Game {
         switch(cmd) 
         {
         case GO :
-            result = this.go(arg0);
+            result = this.go(arg0, argList);
             break;
         case HELP :
             result = this.help(arg0);
             this.playerTurn = true;
             break;
         case TAKE :
-            result = this.take(arg0);
+            result = this.take(arg0, argList);
             break;
         case LOOK :
-            result = this.look(arg0);
+            result = this.look(arg0, argList);
             this.playerTurn = true;
             break;
         case QUIT :
             this.quit();
             break;
         case USE :
-            result = this.use(arg0, arg1);
+            result = this.use(arg0, arg1, argList);
             break;
         case TALK :
-            result = this.talk(arg0);
+            result = this.talk(arg0, argList);
             break;
         case SEARCH:
-            result = this.search(arg0);
+            result = this.search(arg0, argList);
             this.playerTurn = true;
             break;
-        default:
+        case QUEST :
+        	result = this.quests();
+        	this.playerTurn = true;
             break;
         }
         
 	    return result;
 	}
 	
-	public boolean search(String arg) {	    
+/*------------------------------------------------------------------------*
+ *                      [ACTION UTILISATEUR]                              *
+ *------------------------------------------------------------------------*/
+	
+	/**
+	 * Permet de déplacer le personnage dans un nouveau lieu. Ce lieu doit être eccessible depuis
+	 * la position actuelle du joueur.
+	 * 
+	 * @param place Nom du lieu ou le joueur doit se déplacer.
+	 * @param argList 
+	 * @return 
+	 * @throws InvalidArgumentException si place est null ou n'est pas un nom de lieu valide.
+	 */
+	public boolean go(String place, List<Object> argList) {
+		Exit exit = player.getPlace().getExit(place);
+		argList.add(exit);
+		
+		if(exit == null) {
+		    this.ui.display("Failed find the place \"" + place + "\" are you lost?\n");
+		    return false;
+		}
+		
+		if(!exit.canCross()) {
+		    this.ui.display("Failed to walk to \"" + place + "\", the exit \"" + exit.getName() + "\" cannot be crossed!\n");
+	        return false;
+		}
+		
+        player.setPlace(exit.getPlace());
+        this.ui.display("You successfuly walked to \"" + place + "\"!\n");
+		return true;	
+	}
+	
+	
+	/**
+	 * [TODO]
+	 * Permet d'afficher les objets et les sorties présentes dans le lieu actuel du joueur.<br>
+	 * Si item n'est pas null
+	 * @param argList 
+	 * 
+	 * @param item Nom du lieu ou le joueur doit se déplacer.
+	 * @throws InvalidArgumentException si place n'est pas un nom de lieu valide.
+	 */
+	public boolean look(String name, List<Object> argList) {
+	 	Lookeable toLook = null;
+	 	
+		if(name != null) {
+			Object target = null;
+
+	    	target = searchCurrentPlaceObjectByName(name);
+	    	argList.add(target);
+	    	
+	    	if(target == null) {
+	    		this.ui.display("Failed to look \"" + name + "\" : Not found!\n");
+	    		return false;
+	    	}
+	    	
+	    	try{
+		    	toLook = (Lookeable) target;
+	    	}catch(ClassCastException e) {
+	    		this.ui.display("Failed to look \"" + name + "\" : Not lookeable!\n");
+	    		return false;
+	    	}
+	    	
+		    			
+		}else {
+			toLook = this.player.getPlace();
+		}
+		 
+    	this.ui.display(toLook.getDescription() + "\n");
+    	return true;
+	}
+	
+
+	/**
+	 * Permet de prendre un objet dans le lieu ou se trouve le joueur et de le mettre dans le sac du joueur.
+	 */
+	public boolean take(String itemName, List<Object> argList) {
+	    Item item = player.getPlace().getItem(itemName);
+	    argList.add(item);
+	    
+	    boolean addSuccess = true;
+	    
+	    if(item == null) {
+	        this.ui.display("Failed to take \"" + itemName + "\" : Item not found!\n");
+	        addSuccess = false;
+	    }else {
+	        if(!player.addItem(item)) {
+	            this.ui.display("Failed to take \"" + itemName + "\" : Bag full!\n");
+	            addSuccess = false;
+	        }else {
+	            this.ui.display("\"" + itemName + "\" : Successfully added to bag!\n");
+	        }
+	    }
+	    
+	    return addSuccess;  
+	}
+	
+	
+	/**
+	 * Quitte le jeu.
+	 */
+	public void quit() {
+		this.quitRequested = true;
+	}
+		
+		
+	public boolean search(String arg, List<Object> argList) {	    
 	    if(arg == null) {
+	    	argList.add(player.getPlace());
 	        this.ui.display(player.getPlace().toString());
 	    }
 	    else{
 	        GCharacter c = player.getPlace().getCharacter(arg);
+	    	argList.add(c);
+
 	        if(c != null) {
 	            this.ui.display(c.toString());
 	        }else {
@@ -439,11 +455,12 @@ public class Game {
 	            return false;
 	        }
 	    }
+	    
 	    return true;
 	}
 	
 	public boolean help(String arg0) {
-	    if(arg0 != null) {
+		if(arg0 != null) {
 	        arg0 = arg0.toUpperCase();
 	        Command cmdHelp;
 	            
@@ -466,7 +483,7 @@ public class Game {
 	    return false;
 	}
 	
-	public boolean use(String arg0, String arg1) {
+	public boolean use(String arg0, String arg1, List<Object> argList) {
 	    Useable toUse = null;
 	    try{
 	    	Item item = this.player.getItem(arg0);
@@ -505,22 +522,18 @@ public class Game {
 	    	return false;
 	    }
 	    
+	    argList.add(toUse);
+	    argList.add(target);
         this.ui.display("You successfully used \"" + arg0 + "\"\n");
 	    return true;
 	}
 	
-	public void setObjectiveReached() {
-	    this.objectiveReached = true;
-	}
-	
-	
-	public Hero getHero() {
-	    return this.player;
-	}
-	
-	public GameUI getUI() {
-	    return this.ui;
-	}
-	
-	
+	public boolean quests() {
+		for(Quest q : this.quests) {
+			if(q.isStarted()) {
+				this.ui.display("[" + q.getName() + "]-> " + q.getInfos() + "\n");
+			}
+		}
+		return true;
+	}	
 }
