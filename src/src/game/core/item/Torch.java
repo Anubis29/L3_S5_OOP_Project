@@ -15,7 +15,14 @@ public class Torch extends Item implements Useable {
 
     @Override
     public boolean use(Object target) {
-    	DarkPlace lTarget = (DarkPlace) target;
+    	DarkPlace lTarget = null;
+    	
+    	try {
+    		lTarget = (DarkPlace) target;
+    	}catch(ClassCastException e){
+    		return false;
+    	}
+    	
     	if(lTarget == null) {
     		return false;
     	}

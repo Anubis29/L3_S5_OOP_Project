@@ -138,7 +138,7 @@ public class Game {
 	    Place village = new Place(KINGDOM_NAME + " village", "The center of " + KINGDOM_NAME + " activities. It is always an active place.");
 	    Place river = new Place(KINGDOM_NAME + " west river", "A magnificent river. The river is to large to be crossed.");
 	    Place forest = new Place(KINGDOM_NAME + " east forest", "This forest seems unsafe.");
-	    Place cave = new Cave("Cave", "Nothing special here.");
+	    Cave cave = new Cave("Cave", "There is a glyphe, and a sentence : Looking at this glyph will force the " + OBJECTIVE_ITEM.getName() + " to appear.");
 	    Place plain = new Place("Endless plains", "Nothing special here.");
 	    Place mountain = new Place("Montains", "Nothing special here.");
 	    Place dragonsLair = new Place("Dragon's Lair", "Nothing special here.");
@@ -159,8 +159,9 @@ public class Game {
 	    village.addExit(new Exit("West Border", river));
 	    village.addExit(new Exit("East Border", forest));
 	    village.addExit(new Exit("South Border", plain));
-	    TalkingCharacter ringMan = new TalkingCharacter("Jean", "He seems sad.", "Hey you! My wife lost her ring in the river. If you find it, can you bring it to me ?\n", null);
+	    TalkingCharacter ringMan = new TalkingCharacter("Jean", "He seems sad.", "Hey you! My wife lost her ring in the river. If you find it, can you bring it to me ?", null);
 	    village.addCharacter(ringMan);
+	    village.addCharacter(new TalkingCharacter("Samia", "She looks able to help", "I heard a there is a cave after the forest. But impossible to look inside without light.", null));
 	    
 	    // River
 	    river.addExit(new Exit("East", village));
@@ -182,9 +183,7 @@ public class Game {
 	    mountain.addExit(new Exit("Bottom of the montain", plain));
 	    mountain.addExit(new Exit("Entrance of the Dragon's Lair", dragonsLair));
 	    
-	    // Dragon's lair
-	    dragonsLair.addExit(new Exit("Magic teleport", throneRoom));
-	    dragonsLair.addItem(OBJECTIVE_ITEM);
+	    // Dragon's lair, rien
 	    
 	    // Quests
 	    IntroductionQuest intro = new IntroductionQuest("Introduction", this.player, king, ENEMY_NAME, throneToVillage, new Sword(), OBJECTIVE_ITEM.getName(), KINGDOM_NAME, this.ui);
@@ -197,6 +196,9 @@ public class Game {
 	    
 	    RingQuest ringQuest = new RingQuest("A bad day", "Find " + ringMan.getName() + "'s ring in the river", this.player, ringMan, ring, this.ui);
 	    this.quests.add(ringQuest);
+	    
+	    CaveReadQuest caveQuest = new CaveReadQuest("The magic word", "Look in the cave", this.player, OBJECTIVE_ITEM, dragonsLair, cave, this.ui);
+	    this.quests.add(caveQuest);
 	}
 	
 	
@@ -238,6 +240,11 @@ public class Game {
 		target = (target == null) ? this.player.getPlace().getItem(name) : target ;
     	target = (target == null) ? this.player.getPlace().getCharacter(name) : target;
     	target = (target == null) ? this.player.getPlace().getExit(name) : target;
+    	
+    	// try the place itself
+    	if(target == null && this.player.getPlace().getName().equalsIgnoreCase(name)) {
+    		target = this.player.getPlace();
+    	}
     	
     	// Search player bag
     	target = (target == null) ? this.player.getItem(name) : target;
@@ -302,14 +309,12 @@ public class Game {
             break;
         case HELP :
             result = this.help(arg0);
-            this.playerTurn = true;
             break;
         case TAKE :
             result = this.take(arg0, argList);
             break;
         case LOOK :
             result = this.look(arg0, argList);
-            this.playerTurn = true;
             break;
         case QUIT :
             this.quit();
@@ -322,11 +327,9 @@ public class Game {
             break;
         case SEARCH:
             result = this.search(arg0, argList);
-            this.playerTurn = true;
             break;
         case QUEST :
         	result = this.quests();
-        	this.playerTurn = true;
             break;
         }
         
@@ -502,10 +505,7 @@ public class Game {
 	    Object target = null;
 	    
 	    if(arg1 != null) {
-	    	target = (target == null) ? this.player.getPlace().getItem(arg1) : target ;
-	    	target = (target == null) ? this.player.getPlace().getCharacter(arg1) : target;
-	    	target = (target == null) ? this.player.getItem(arg1) : target;
-	    	target = (target == null) ? this.player.getPlace().getExit(arg1) : target;
+	    	target = searchCurrentPlaceObjectByName(arg1);
 	    	
 	    	if(target == null) {
 	    		this.ui.display("Failed to use \"" + arg0 + "\" on \"" + arg1 + "\" : Target nor found!\n");

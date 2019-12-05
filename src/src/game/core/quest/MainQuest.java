@@ -22,6 +22,13 @@ public class MainQuest extends Quest{
 		return this.itemUsed;
 	}
 	
+	
+	@Override
+	protected void onComplete() {
+	    this.UI.display("CONGRATULATIONS! You saved the world\n");
+	    super.onComplete();
+	}
+	
 	@Override
 	public void onUserAction(Command cmd, List<Object> args) {
 		if(cmd == Command.USE && args.size() >= 1) {
