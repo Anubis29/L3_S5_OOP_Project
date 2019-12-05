@@ -1,5 +1,5 @@
 package src.game.core.item;
 
-public interface Useable<T> {
-    abstract void use(T target);
+public interface Useable{
+    abstract boolean use(Object target);
 }

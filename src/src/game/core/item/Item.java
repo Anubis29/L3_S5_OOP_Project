@@ -10,12 +10,14 @@ public abstract class Item implements Lookeable{
 	private final String NAME;
 	private final int VOLUME ;
 	private ItemContainer container;
+	private String description;
 	
 	//
-	public Item(String name, int volume){
+	public Item(String name, String description, int volume){
 		this.NAME = name;
 		this.VOLUME= volume;
 		this.container = Item.DEFAULT_CONTAINER;
+		this.description = description;
 	}
 
 	
@@ -31,9 +33,6 @@ public abstract class Item implements Lookeable{
 	public ItemContainer getContainer() {
 		return this.container;
 	}
-	
-	public abstract String getDescription();
-
 
  //les accesseurs (setter)
 	public void setContainer(ItemContainer container) throws ItemContainerException {
@@ -60,5 +59,15 @@ public abstract class Item implements Lookeable{
                throw e;
            }
        }
+	}
+	
+	@Override
+	public String getDescription() {
+		return this.getName() + " : " + this.description;
+	}
+
+	@Override
+	public void setDescription(String desc) {
+		this.description = desc;
 	}
 }

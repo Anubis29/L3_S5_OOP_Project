@@ -3,11 +3,8 @@ package src.game.core.container;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.game.core.Bag;
 import src.game.core.item.Item;
-import src.game.exception.BagFullException;
 import src.game.exception.GameException;
-import src.game.exception.ItemContainerException;
 
 public abstract class ItemContainer {
     
@@ -70,7 +67,7 @@ public abstract class ItemContainer {
     
     public Item getItem(String name) {
         for (Item allItem : this.items){
-            if (allItem.getName()==name){
+            if (allItem.getName().equalsIgnoreCase(name.toUpperCase())){
                 return allItem;
             }
         }

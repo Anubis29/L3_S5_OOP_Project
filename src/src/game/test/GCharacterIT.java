@@ -22,8 +22,8 @@ public class GCharacterIT {
     
     @Before
     public void setUp() {
-        cPlace = new Cave();
-        testC = new GCharacter(C_NAME, cPlace, C_MAX_LP);
+        cPlace = new Place(null, null);
+        testC = new GCharacter(C_NAME, null, cPlace, C_MAX_LP);
         
     }
     
@@ -71,7 +71,7 @@ public class GCharacterIT {
     
     @Test
     public void moveTest() {
-        GCharacter testC_2 = new GCharacter(C_NAME, null);
+        GCharacter testC_2 = new GCharacter(C_NAME, null, null);
         
         assertNull(testC_2.getPlace());
         assertFalse(cPlace.findCharacter(testC_2));

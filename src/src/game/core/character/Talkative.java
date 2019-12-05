@@ -26,6 +26,7 @@ public interface Talkative {
         this.sentence=SENTENCE_DEFAULT;
     }*/
     
-    public String getSentence();
-    
+    public String getName();
+    public String getSentence(); 
+    public void setSentence(String sentence);
 }

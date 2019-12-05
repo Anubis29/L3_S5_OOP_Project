@@ -17,7 +17,7 @@ public class HealPotionIT {
     
     @Before
     public void setUp() {
-        c = new GCharacter("Perso", null, MAX_LP);
+        c = new GCharacter("Perso", null, null, MAX_LP);
         softPot = new SoftHealPotion();
         medPot = new MediumHealPotion();
         superPot = new SuperHealPotion();

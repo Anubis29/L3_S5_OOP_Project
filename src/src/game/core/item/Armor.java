@@ -10,7 +10,7 @@ public class Armor extends Item {
     private int currentShield;
     
     public Armor() {
-        super(Armor.DEFAULT_NAME, Armor.DEFAULT_VOLUME);
+        super(Armor.DEFAULT_NAME, null, Armor.DEFAULT_VOLUME);
         this.MAX_SHIELD = DEFAULT_MAX_SHIELD;
         this.currentShield = this.MAX_SHIELD;
     }

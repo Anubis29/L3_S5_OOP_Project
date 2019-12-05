@@ -1,12 +1,15 @@
 package src.game.core.place;
 
+import src.game.core.item.weapon.DuskBlade;
+
 public class DragonsLair extends Place {
 
     private static final String NAME = "Dragon's Lair";
     
-    public DragonsLair() {
-        super(DragonsLair.NAME);
-        // TODO Auto-generated constructor stub
+    public DragonsLair(DuskBlade blade) {
+        super(DragonsLair.NAME, null);
+        
+        this.addItem(blade);
     }
 
     @Override
@@ -14,5 +17,7 @@ public class DragonsLair extends Place {
         // TODO Auto-generated method stub
         return null;
     }
+
+
 
 }

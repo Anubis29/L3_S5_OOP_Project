@@ -5,7 +5,7 @@ public class Forest extends Place {
     public static final String NAME = "Forest";
     
     public Forest() {
-        super(Forest.NAME);
+        super(Forest.NAME, null);
         // TODO Auto-generated constructor stub
     }
 
@@ -14,5 +14,6 @@ public class Forest extends Place {
         // TODO Auto-generated method stub
         return null;
     }
+
  
 }

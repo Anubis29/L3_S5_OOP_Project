@@ -5,24 +5,22 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import src.game.core.Exit;
 import src.game.core.character.GCharacter;
+import src.game.core.exit.Exit;
 import src.game.core.item.Item;
 import src.game.core.item.potion.SuperHealPotion;
 import src.game.core.item.weapon.Sword;
-import src.game.core.place.Cave;
 import src.game.core.place.Place;
 import src.game.exception.GameException;
 
 public class PlaceIT {
     private final String NAME = "Place";
-    private final String DESCRIPTION = "Desc";
     
     private Place testPlace;
             
     @Before
     public void setUp() {
-        testPlace = new Cave();
+        testPlace = new Place(NAME, null);
     }
     
     
@@ -36,7 +34,7 @@ public class PlaceIT {
     public void testExit() {
         final String EXIT_NAME = "Exit";
    
-        final Place EXIT_PLACE = new Cave();
+        final Place EXIT_PLACE = new Place(NAME, null);
         final Exit TEST_EXIT = new Exit(EXIT_NAME, EXIT_PLACE);
         
         testPlace.addExit(TEST_EXIT);
@@ -46,12 +44,7 @@ public class PlaceIT {
     
     @Test 
     public void itemContainerTest() {
-        // add test
-        final String ITEM_NAME_1 = "Item1";
-        final String ITEM_NAME_2 = "Item2";
-        final int ITEM_CAPACITY = 1;
-        final String ITEM_DESCRIPTION = null;
-        
+        // add test        
         final Item ITEM_TEST_1 = new Sword();
         final Item ITEM_TEST_2 = new SuperHealPotion();
 
@@ -101,8 +94,8 @@ public class PlaceIT {
         final String NAME_ALICE = "Alice";
         final String NAME_BOB = "Bob";
         
-        final GCharacter ALICE = new GCharacter(NAME_ALICE, (Place) null);
-        final GCharacter BOB = new GCharacter(NAME_BOB, (Place) null);
+        final GCharacter ALICE = new GCharacter(NAME_ALICE, null, (Place) null);
+        final GCharacter BOB = new GCharacter(NAME_BOB, null, (Place) null);
 
         
         // ensure can't find not existing item

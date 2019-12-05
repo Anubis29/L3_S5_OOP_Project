@@ -7,7 +7,6 @@ package src.game.core.character;
 
 import static java.sql.JDBCType.NULL;
 
-import src.game.core.Attackable;
 import src.game.core.item.Armor;
 import src.game.core.item.weapon.Weapon;
 import src.game.core.place.Place;
@@ -16,16 +15,18 @@ import src.game.core.place.Place;
  *
  * @author audrey
  */
-public class Hero extends GCharacter implements Attackable {
+public class Hero extends GCharacter implements Combative {
+    
+    private final static String NAME = "Hero";
     
     private Armor armorOfHero;
     
-    Hero(String nameOfPersonnage, Place placeOfStart){
-        super(nameOfPersonnage,placeOfStart);
+    public Hero(Place placeOfStart){
+        super(Hero.NAME ,null, placeOfStart);
         this.armorOfHero = null;
     }
     
-    public void attack(Attackable target, Weapon weapon){
+    public void attack(Combative target, Weapon weapon){
         if (this.findItem(weapon)){
             target.getAttacked(weapon);
         }
@@ -40,4 +41,16 @@ public class Hero extends GCharacter implements Attackable {
     public void switchArmor(Armor newArmor){
         this.armorOfHero=newArmor;
     }
+
+	@Override
+	public Weapon getActiveWeapon() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setActiveWeapon(Weapon weapon) {
+		// TODO Auto-generated method stub
+		
+	}
 }

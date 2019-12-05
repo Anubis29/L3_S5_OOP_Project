@@ -12,11 +12,14 @@ import src.game.core.character.GCharacter;
  */
 public abstract class HealPotion extends Potion { 
     
+	private static final String descPart1 = "Add "; 
+	private static final String descPart2 = " HP to the target."; 
+
     private int recoveredLP;
     
     
     public HealPotion(String name, int volume, int lpRecover) {
-        super(name, volume);
+        super(name, HealPotion.descPart1 + lpRecover + HealPotion.descPart2,  volume);
         this.recoveredLP = lpRecover;
     }
     
@@ -33,12 +36,19 @@ public abstract class HealPotion extends Potion {
      * @param target The target of the potion
      */
     @Override
-    public void use(GCharacter target) {
-        target.addLP(this.recoveredLP);
-    }
-
-    @Override 
-    public String getDescription() {
-        return "The " + this.getName() + " adds " + this.recoveredLP + " lp to the target.";
+    public boolean use(Object target) {
+    	GCharacter lTarget;
+    	try {
+    		lTarget = (GCharacter) target;
+    	}catch(ClassCastException e) {
+    		return false;
+    	}
+    	
+    	if(lTarget != null) {
+    		lTarget.addLP(this.recoveredLP);
+    		// remove from the object
+    		this.setContainer(null);
+    	}
+        return target != null;
     }
 }

@@ -5,7 +5,7 @@ public class Village extends Place implements SafePlace  {
     private static final String NAME = "Village";
     
     public Village() {
-        super(Village.NAME);
+        super(Village.NAME, null);
         // TODO Auto-generated constructor stub
     }
 
@@ -13,8 +13,6 @@ public class Village extends Place implements SafePlace  {
     public String getDescription() {
         // TODO Auto-generated method stub
         return null;
-    }
-    
-    
+    } 
 
 }

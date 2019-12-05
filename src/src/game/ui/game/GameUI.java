@@ -1,6 +1,9 @@
 package src.game.ui.game;
 
+import java.util.List;
+
 import src.game.core.*;
+import src.game.core.character.Talkative;
 import src.game.exception.InvalidUIModeException;
 import src.game.ui.UI_Mode;
 import src.game.ui.UI_ModeSelector;
@@ -42,14 +45,20 @@ abstract public class GameUI {
 	public Game getGame() {
 		return this.GAME;
 	}
+	
 
 	
-	abstract public void readUserAction();
+    public abstract Command readUserCommand(List<String> l);
 	abstract public void display(String str);
-	abstract public void display(Lookeable l);
+	abstract public void look(Lookeable l);
 	//abstract public void displayError();
 	//abstract public static void 
 	//abstract public static void displayGameExit();
+
+    abstract public void displaySentence(Talkative t);
+
+
+
 	
 	/*abstract protected void showHelp();
 	abstract protected void movePlayerToPlace(String place);

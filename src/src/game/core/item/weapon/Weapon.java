@@ -5,8 +5,8 @@ import src.game.core.item.Item;
 public class Weapon extends Item {
     private final int DAMAGES;
     
-    public Weapon(String name, int volume, int damages){
-        super(name, volume);
+    public Weapon(String name, String desc, int volume, int damages){
+        super(name, desc, volume);
         this.DAMAGES = damages;
     }
     

@@ -1,4 +1,4 @@
-package src.game.core;
+package src.game.core.exit;
 
 import src.game.core.place.Place;
 

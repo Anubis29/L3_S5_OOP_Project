@@ -5,7 +5,7 @@ public class River extends Place{
     private static final String NAME = "River";
 
     public River() {
-        super(River.NAME);
+        super(River.NAME, null);
         // TODO Auto-generated constructor stub
     }
 
@@ -13,5 +13,6 @@ public class River extends Place{
     public String getDescription() {
         // TODO Auto-generated method stub
         return null;
-    } 
+    }
+
 }

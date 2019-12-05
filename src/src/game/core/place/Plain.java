@@ -5,7 +5,7 @@ public class Plain extends Place{
     private final static String NAME = "Plain";
     
     public Plain() {
-        super(Plain.NAME);
+        super(Plain.NAME, null);
         // TODO Auto-generated constructor stub
     }
 
@@ -13,6 +13,7 @@ public class Plain extends Place{
     public String getDescription() {
         // TODO Auto-generated method stub
         return null;
-    }    
+    }
+
     
 }

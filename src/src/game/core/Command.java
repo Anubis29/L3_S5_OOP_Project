@@ -65,13 +65,25 @@ public enum Command {
 	 * Use the item specified by &ltITEM&gt.
 	 * If the item can be used with others item, the list of item can be specified using [&ltITEM_N&gt]..."
 	 */
-	USE(1, Integer.MAX_VALUE , 
+	USE(1, 2, 
 				"Usage : USE <ITEM> [<ITEM_N>]...\n" +
 				"Use the item specified by <ITEM>. " +
 				"If the item can be used with others item, the list of item can be specified using "
-				+ "[<ITEM_N>]...");
+				+ "[<ITEM_N>]..."),
 	
+    SEARCH(0, 1, 
+            "Usage : SEARCH [BACKPACK] \n" +
+            "List the available exits and items in the place where the player is.\n" +
+            "List the available items in the player's backpack if [BACKPACK] is present.\n"),
 	
+	TALK(1, 1, 
+            "Usage : TALK <CHARACTER>\n" +
+            "Talk to the character specified by <CHARACTER>"
+    );
+    
+    
+	
+    
 	private final int MIN_NB_ARGS;
 	private final int MAX_NB_ARGS;
 	private final String HELP_MSG;

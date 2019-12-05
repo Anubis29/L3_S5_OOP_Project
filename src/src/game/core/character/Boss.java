@@ -5,7 +5,6 @@
  */
 package src.game.core.character;
 
-import src.game.core.Attackable;
 import src.game.core.item.weapon.Weapon;
 import src.game.core.place.Place;
 

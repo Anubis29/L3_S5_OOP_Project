@@ -1,12 +1,13 @@
 package src.game.ui.game;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import src.game.core.*;
-
+import src.game.core.character.Talkative;
 import src.game.exception.GameException;
-import src.game.exception.InvalidArgumentException;
-import src.game.exception.InvalidCommandException;
 
 public class GameUI_Console extends GameUI {
 
@@ -16,92 +17,100 @@ public class GameUI_Console extends GameUI {
 		super(game);
 		this.scanner = new Scanner(System.in);
 	}
-	
-	@Override
-	public void readUserAction() {
-		
-		while(true) {
-			
-			System.out.print("PLAYER ACTION : ");
-			Command cmd;
-			String cmdStr = null;
-			
-			try {
-				String inputStrArray[] = this.scanner.nextLine().toUpperCase().split(" ");
-				cmdStr = inputStrArray[0];
-				
-				cmd = Command.getFromString(cmdStr);
-				
-				if(!cmd.checkArgCount(inputStrArray.length-1)) {
-					throw new InvalidArgumentException(cmd, "Bad argument count!");
-				}
-				
-				String arg0 = inputStrArray.length >= 2 ? inputStrArray[1] : null;
-				
-				switch(cmd) 
-				{
-				case GO :
-					getGame().go(arg0);
-					break;
-				case HELP :
-					displayHelp(arg0);
-					break;
-				case TAKE :
-					getGame().take(arg0);
-					break;
-				case LOOK :
-					getGame().look(arg0);
-					break;
-				case QUIT :
-					getGame().quit();
-					break;
-				case USE :
-					break;
-				}
-				
-				break;
-				
-			}catch(GameException e) {
-				System.out.println(e.getMessage());
-			}	
-		}
-		
-		// TODO Auto-generated method stub
-		
-	}
 
-	
-	public void displayHelp(String arg0) throws InvalidArgumentException {
-		if(arg0 != null) {
-			arg0 = arg0.toUpperCase();
-			Command cmdHelp;
-			
-			try {
-				cmdHelp = Command.getFromString(arg0);
-			}catch(InvalidCommandException e) {
-				throw new InvalidArgumentException(Command.HELP, arg0 + " is not a valid command name.");
-			}
-			
-			System.out.println(cmdHelp.help());
-		}else {
-			System.out.println("Available commands are : ");
-			for(Command cmd : Command.values()) {
-				System.out.println(" - " + cmd);
-			}
-		}
-		
-		System.out.println();
-		
-	}
+	@Override
+    public Command readUserCommand(List<String> l) {
+        
+            String inputLine= this.scanner.nextLine().toUpperCase();
+            
+            ArrayList<String> parsedStrings = new ArrayList<>(); 
+            String bufferString = new String();
+            
+            
+            boolean quoteToken = false;
+            
+            for(int i=0; i < inputLine.length(); i++) {
+                
+                boolean pushWordToken = false;
+                boolean skipChar = false;
+                
+                if(i == inputLine.length()-1) {
+                    pushWordToken = true;
+                }
+                
+                char value = inputLine.charAt(i);
+                
+                if(value == '"') {
+                    skipChar = true;
+                    if(quoteToken) {
+                        quoteToken = false;
+                        pushWordToken = true;
+                    }else {
+                        quoteToken = true;
+                    }
+                }
+                
+                if(value == ' ' && !quoteToken) {
+                    skipChar = true;
+                    pushWordToken = true;
+                }
+                
+                if(!skipChar) {
+                    bufferString += value;
+                }
+                
+                if(pushWordToken) {
+                    if(!bufferString.isEmpty()) {
+                        parsedStrings.add(bufferString);
+                        bufferString = new String();
+                    }
+                }
+            }
+            
+            if(quoteToken) {
+                throw new GameException("Invalid input, a quote is missing!");
+            }else if(parsedStrings.isEmpty()) {
+                throw new GameException("No input!");
+            }
+            
+            Command cmd = Command.getFromString(parsedStrings.get(0));     
+           
+            for(int i = 1; i < parsedStrings.size(); i++) {
+                l.add(parsedStrings.get(i));
+            }
+            
+            return cmd;
+    }
 
 	@Override
 	public void display(String msg) {
-		System.out.println(msg);
+		System.out.print(msg);
 	}
 	
 	@Override
-	public void display(Lookeable l) {
+	public void look(Lookeable l) {
 		this.display(l.getDescription());
+	}
+	
+	
+	private static final int TALK_DELAY = 0;
+	
+	@Override
+	public void displaySentence(Talkative t) {
+	    String sentence = t.getSentence();
+	    
+	    System.out.print("[" + t.getName() + "] : \""); 
+	    for(int i=0; i < sentence.length(); i++) {
+	        try {
+                TimeUnit.MILLISECONDS.sleep(GameUI_Console.TALK_DELAY);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+	        System.out.print(sentence.charAt(i));
+	    }
+	            
+	    System.out.println("\"");
 	}
 	
 	
